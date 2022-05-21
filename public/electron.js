@@ -1,11 +1,15 @@
 // Module to control the application lifecycle and the native browser window.
-const { app, BrowserWindow, protocol } = require("electron");
+const { app, BrowserWindow, protocol, ipcMain, dialog } = require("electron");
 const path = require("path");
 const url = require("url");
+const fs = require('fs');
+require('./mainMenu');
+
+var mainWindow;
 
 // Create the native browser window.
 function createWindow() {
-    const mainWindow = new BrowserWindow({
+    mainWindow = new BrowserWindow({
         width: 800,
         height: 600,
         // Set the path of an additional "preload" script that can be used to
@@ -48,12 +52,65 @@ function setupLocalFilesNormalizerProxy() {
     );
 }
 
+function list(dir) {
+    const walk = entry => {
+        return new Promise((resolve, reject) => {
+            fs.exists(entry, exists => {
+                if (!exists) {
+                    return resolve({});
+                }
+                return resolve(new Promise((resolve, reject) => {
+                    fs.lstat(entry, (err, stats) => {
+                        if (err) {
+                            return reject(err);
+                        }
+                        if (!stats.isDirectory()) {
+                            return resolve({
+                                name: path.basename(entry),
+                                path: entry,
+                                type: 'file',
+                            });
+                        }
+                        resolve(new Promise((resolve, reject) => {
+                            fs.readdir(entry, (err, files) => {
+                                if (err) {
+                                    return reject(err);
+                                }
+                                Promise.all(files.map(child => walk(path.join(entry, child)))).then(children => {
+                                    resolve({
+                                        name: path.basename(entry),
+                                        path: entry,
+                                        type: 'directory',
+                                        files: children
+                                    });
+                                }).catch(err => {
+                                    reject(err);
+                                });
+                            });
+                        }));
+                    });
+                }));
+            });
+        });
+    }
+
+    return walk(dir);
+}
+
 // This method will be called when Electron has finished its initialization and
 // is ready to create the browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
     createWindow();
     setupLocalFilesNormalizerProxy();
+
+    ipcMain.handle('dialog', (event, method, params) => {
+        return dialog[method](params);
+    });
+
+    ipcMain.handle('getFiles', (event, directory) => {
+        return list(directory.directory);
+    });
 
     app.on("activate", function () {
         // On macOS it's common to re-create a window in the app when the
