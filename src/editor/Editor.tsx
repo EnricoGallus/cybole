@@ -119,13 +119,6 @@ function Editor() {
                            ref={xmlEditorRef}
                            xml={xml} />
             </Grid>
-            <Grid>
-                <div>
-                    <pre>
-                        {xml}
-                    </pre>
-                </div>
-            </Grid>
         </Grid.Container>
     )
 }
