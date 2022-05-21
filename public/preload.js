@@ -9,6 +9,7 @@ process.once("loaded", () => {
     contextBridge.exposeInMainWorld("versions", process.versions);
     contextBridge.exposeInMainWorld('electron', {
         openDialog: (method, config) => ipcRenderer.invoke('dialog', method, config),
-        getFiles: (directory) => ipcRenderer.invoke('getFiles', directory)
+        getFiles: (directory) => ipcRenderer.invoke('getFiles', directory),
+        readFile: (config) => ipcRenderer.invoke('readFile', config)
     });
 });

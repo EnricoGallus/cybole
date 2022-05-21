@@ -4,7 +4,8 @@ declare global {
     interface Window {
         electron: {
             openDialog: any,
-            getFiles: any
+            getFiles: any,
+            readFile: any,
         };
     }
 }
