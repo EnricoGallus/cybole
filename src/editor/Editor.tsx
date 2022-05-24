@@ -1,93 +1,38 @@
 import {Link, useLocation} from "react-router-dom";
-import {createRef, useEffect, useState} from "react";
-import {Grid, Tree} from "@geist-ui/core";
-import {Util, XmlEditor} from "react-xml-editor";
-import {DocSpec, Xml} from "react-xml-editor/lib/types";
-import "react-xml-editor/css/xonomy.css"
+import {useEffect, useState} from "react";
+import {Grid, Radio, Tree} from "@geist-ui/core";
+import EditInXmlFormat from "./EditInXmlFormat";
+import EditInDataGridFormat from "./EditInDataGridFormat";
+
+export enum EDITOR_TYPE {
+    XML= "0",
+    DATA_GRID = "1"
+}
 
 function Editor() {
     const location = useLocation();
+    const [editorType, setEditorType] = useState(EDITOR_TYPE.XML);
     const [files, setFiles] = useState([]);
-    const [xml, setXml] = useState('');
+    const [content, setContent] = useState('');
     const [editorKey, setEditorKey] = useState('');
-    const xmlEditorRef = createRef<XmlEditor>();
-    const nodeDef = '<node name="" channel="" format="" model=""/>';
-    const cybolDef: DocSpec = {
-        elements: {
-            node: {
-                attributes: {
-                    name: {
-                        asker: Util.askString,
-                        menu: [{
-                            action: Util.deleteAttribute,
-                            caption: 'Delete attribute',
-                        }],
-                    },
-                    channel: {
-                        asker: Util.askPicklist([{
-                            value: 'short', caption: 'short'
-                        }, {
-                            value: 'medium', caption: 'medium',
-                        }, 'long']),
-                    },
-                    format: {
-                        asker: Util.askPicklist([{
-                            value: 'short', caption: 'short'
-                        }, {
-                            value: 'medium', caption: 'medium',
-                        }, 'long']),
-                    },
-                    model: {
-                        asker: Util.askPicklist([{
-                            value: 'short', caption: 'short'
-                        }, {
-                            value: 'medium', caption: 'medium',
-                        }, 'long']),
-                    },
-                },
-                menu: [{
-                    action: Util.newElementChild(nodeDef),
-                    caption: 'Append child <node />',
-                }, {
-                    action: Util.newAttribute({
-                        name: 'label',
-                        value: 'default value',
-                    }),
-                    caption: 'Add attribute @label',
-                    hideIf: (xml: Xml, id: string[]) => {
-                        const element = Util.getXmlNode(xml, id);
-                        return element && element.$ && typeof element.$.label !== 'undefined';
-                    },
-                }, {
-                    action: Util.deleteElement,
-                    caption: 'Delete this <node />',
-                    icon: 'exclamation.png',
-                }, {
-                    action: Util.newElementBefore(nodeDef),
-                    caption: 'New <node /> before this',
-                }, {
-                    action: Util.newElementAfter(nodeDef),
-                    caption: 'New <node /> after this',
-                }, {
-                    action: Util.duplicateElement,
-                    caption: 'Copy <node />',
-                }, {
-                    action: Util.moveElementUp,
-                    caption: 'Move <node /> up',
-                    hideIf: (xml: Xml, id: string[]) => !Util.canMoveElementUp(xml, id),
-                }, {
-                    action: Util.moveElementDown,
-                    caption: 'Move <node /> down',
-                    hideIf: (xml: Xml, id: string[]) => !Util.canMoveElementDown(xml, id),
-                }]
-            },
+
+    const renderEditor = () => {
+        if (editorType === EDITOR_TYPE.XML) {
+            return <EditInXmlFormat key={editorKey} fileKey={editorKey} content={content} />
+        } else if (editorType === EDITOR_TYPE.DATA_GRID) {
+            return <EditInDataGridFormat />
         }
-    };
-    const handler = (item: any) => {
+    }
+
+    const editorTypeChanged = (val: any) => {
+        setEditorType(val);
+    }
+
+    const fileIsSelected = (item: any) => {
         window.electron.readFile({basePath: location.state, relativePath: item})
             .then((content: string) => {
                 setEditorKey(item);
-                setXml(content);
+                setContent(content);
             });
     }
     useEffect(() => {
@@ -109,14 +54,17 @@ function Editor() {
             <Grid xs={12}>
                 <Link to="/" className="btn btn-primary">Back to ProjectSelection</Link>
             </Grid>
+            <Grid xs={24}>
+                <Radio.Group value={editorType} onChange={editorTypeChanged}>
+                    <Radio value="0">XML</Radio>
+                    <Radio value="1">DataGrid</Radio>
+                </Radio.Group>
+            </Grid>
             <Grid xs={6}>
-                <Tree value={files} onClick={handler}/>
+                <Tree value={files} onClick={fileIsSelected}/>
             </Grid>
             <Grid xs={18}>
-                <XmlEditor key={editorKey}
-                           docSpec={cybolDef}
-                           ref={xmlEditorRef}
-                           xml={xml} />
+                {renderEditor()}
             </Grid>
         </Grid.Container>
     )
