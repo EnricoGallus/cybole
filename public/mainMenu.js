@@ -18,26 +18,6 @@ const template = [
             { role: 'quit' }
         ]
     }] : []),
-    // { role: 'fileMenu' }
-    {
-        label: 'Project',
-        submenu: [
-            {
-                label: 'Open Project',
-                click(item, focusedWindow) {
-                    const dialogConfig = {
-                        title: 'Select the Directory containing the project',
-                        buttonLabel: 'Open Project',
-                        properties: ['openDirectory']
-                    };
-                    window.electron.openDialog('showOpenDialog', dialogConfig)
-                        .then((result) => navigate('/editor', { state: { directory: result.filePaths[0]}}));
-                    focusedWindow.webContents.send('save-html');
-                },
-            },
-            isMac ? { role: 'close' } : { role: 'quit' }
-        ]
-    },
     // { role: 'editMenu' }
     {
         label: 'Edit',

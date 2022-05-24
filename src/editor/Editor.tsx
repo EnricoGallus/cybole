@@ -92,7 +92,6 @@ function Editor() {
     }
     useEffect(() => {
         window.electron.getFiles(location.state).then(function (result: any) {
-            console.log(result);
             let tree: any = [];
             tree.push(result);
             setFiles(tree);

@@ -3,7 +3,12 @@ const { app, BrowserWindow, protocol, ipcMain, dialog } = require("electron");
 const path = require("path");
 const url = require("url");
 const fs = require('fs');
+const Sentry = require("@sentry/electron");
+Sentry.init({ dsn: "https://639261e8fe5846fa8d3a4e78131d5f64@o367548.ingest.sentry.io/6425628" });
 require('./mainMenu');
+const unhandled = require('electron-unhandled');
+
+unhandled();
 
 var mainWindow;
 
