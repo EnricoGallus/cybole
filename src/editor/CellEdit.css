@@ -1,0 +1,27 @@
+/*
+.BaseTable__row:hover,
+.BaseTable__row--hover {
+
+.editCell {
+    border: 1px dashed #ccc;
+}
+
+}
+*/
+
+.editCell {
+    display: flex;
+    flex: 1 0 100%;
+    align-items: center;
+    height: 100%;
+    overflow: hidden;
+    margin: 0 -5px;
+    padding: 5px;
+    border: 1px dashed transparent;
+}
+
+.editSelect {
+    width: 100%;
+    height: 30px;
+    margin-top: 10px;
+}

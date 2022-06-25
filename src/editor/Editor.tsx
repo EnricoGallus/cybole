@@ -20,7 +20,7 @@ function Editor() {
         if (editorType === EDITOR_TYPE.XML) {
             return <EditInXmlFormat key={editorKey} fileKey={editorKey} content={content} />
         } else if (editorType === EDITOR_TYPE.DATA_GRID) {
-            return <EditInDataGridFormat />
+            return <EditInDataGridFormat key={editorKey} fileKey={editorKey} content={content} />
         }
     }
 

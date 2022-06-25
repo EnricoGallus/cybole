@@ -8,6 +8,7 @@
   "description": "Text-Editor for CYBOL-Projects",
   "dependencies": {
     "@geist-ui/core": "^2.3.8",
+    "@geist-ui/icons": "^1.0.2",
     "@sentry/electron": "^3.0.7",
     "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.2.0",
@@ -17,14 +18,25 @@
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.4",
     "electron-unhandled": "^4.0.1",
+    "fast-xml-parser": "^4.0.7",
     "react": "^18.1.0",
+    "react-base-table": "^1.13.2",
     "react-dom": "^18.1.0",
     "react-hook-form": "^7.31.1",
+    "react-overlays": "^5.2.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
     "react-xml-editor": "^0.9.0",
     "typescript": "^4.6.4",
     "web-vitals": "^2.1.4"
+  },
+  "devDependencies": {
+    "concurrently": "^7.1.0",
+    "cross-env": "^7.0.3",
+    "electron": "^18.2.3",
+    "electron-builder": "^23.0.3",
+    "electronmon": "^2.0.2",
+    "wait-on": "^6.0.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -75,13 +87,5 @@
     "linux": {
       "target": "deb"
     }
-  },
-  "devDependencies": {
-    "concurrently": "^7.1.0",
-    "cross-env": "^7.0.3",
-    "electron": "^18.2.3",
-    "electron-builder": "^23.0.3",
-    "electronmon": "^2.0.2",
-    "wait-on": "^6.0.1"
   }
 }

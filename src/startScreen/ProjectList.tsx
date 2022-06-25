@@ -11,6 +11,7 @@ function ProjectList() {
             <Grid xs={24}>
                 <Link to="/projectNew" className={"btn btn-primary"}>New Project</Link>
             </Grid>
+
         </Grid.Container>
     )
 }
