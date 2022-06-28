@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProjectOpen renders component 1`] = `
+<div>
+  <div
+    class="jsx-3633143255 item jsx-478091869"
+  >
+    <div
+      class="jsx-3066557810 item xs jsx-3484918754"
+    >
+      Project New
+    </div>
+    <div
+      class="jsx-3066557810 item xs jsx-3484918754"
+    >
+      <div
+        class="jsx-599062270 with-label"
+      >
+        <div
+          class="jsx-599062270 input-container"
+        >
+          <div
+            class="jsx-599062270 input-wrapper"
+          >
+            <input
+              aria-label="project-directory-input"
+              autocomplete="off"
+              class="jsx-599062270 "
+              placeholder=""
+              readonly=""
+              type="text"
+              value=""
+            />
+          </div>
+        </div>
+      </div>
+      <button
+        class="jsx-3108082297 btn"
+        type="button"
+      >
+        <div
+          class="text"
+        >
+          Open Project
+        </div>
+      </button>
+    </div>
+  </div>
+</div>
+`;

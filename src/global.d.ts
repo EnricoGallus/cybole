@@ -3,9 +3,9 @@ export {};
 declare global {
     interface Window {
         electron: {
-            openDialog: any,
+            openDialog(func: string, options: OpenDialogOptions): Promise<Electron.OpenDialogReturnValue>,
             getFiles: any,
             readFile: any,
-        };
+        }
     }
 }

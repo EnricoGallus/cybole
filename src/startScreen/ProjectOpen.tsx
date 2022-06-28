@@ -12,14 +12,14 @@ function ProjectOpen() {
                 Project New
             </Grid>
             <Grid xs={24}>
-                <Input value={directory} readOnly onClick={() => {
-                    const dialogConfig = {
+                <Input aria-label="project-directory-input" value={directory} readOnly onClick={() => {
+                    let dialogConfig = {
                         title: 'Select the Directory of the project',
                         buttonLabel: 'Select Directory',
                         properties: ['openDirectory']
                     };
                     window.electron.openDialog('showOpenDialog', dialogConfig)
-                        .then((result: any) => setDirectory(result.filePaths[0]));
+                        .then(result => setDirectory(result.filePaths[0]));
                 }} />
                 <Button onClick={() => {navigate('/editor', { state: { directory: directory}})}}>Open Project</Button>
             </Grid>

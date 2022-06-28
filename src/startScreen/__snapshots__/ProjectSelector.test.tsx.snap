@@ -1,0 +1,27 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProjectSelector renders component 1`] = `
+<div>
+  <div
+    class="jsx-3633143255 item jsx-3056732639"
+  >
+    <div
+      class="jsx-3066557810 item xs jsx-3484918754"
+    >
+      <div
+        data-testid="project-open"
+      />
+    </div>
+    <div
+      class="jsx-3066557810 item xs jsx-3484918754"
+    >
+      <a
+        class="btn btn-primary"
+        href="/settings"
+      >
+        To Settings
+      </a>
+    </div>
+  </div>
+</div>
+`;
