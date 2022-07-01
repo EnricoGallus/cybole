@@ -28,9 +28,11 @@
     "react-scripts": "5.0.1",
     "react-xml-editor": "^0.10.0",
     "typescript": "^4.7.4",
+    "uuid": "^8.3.2",
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@types/uuid": "^8.3.4",
     "concurrently": "^7.2.2",
     "cross-env": "^7.0.3",
     "electron": "^19.0.6",
