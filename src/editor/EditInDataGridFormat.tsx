@@ -15,13 +15,13 @@ function convertNodeToDataRow(node: any, parent: any): DataRow {
 }
 
 function convertContentToTableFormat(content: string): DataRow[] {
-    var xmlStructure = new XMLParser({ignoreAttributes: false, attributeNamePrefix: ""}).parse(content),
-        rows: DataRow[] = [];
-    xmlStructure.node.node.forEach(function (node: any) {
-        var data = convertNodeToDataRow(node, null);
+    const xmlStructure = new XMLParser({ignoreAttributes: false, attributeNamePrefix: ""}).parse(content);
+        const rows: DataRow[] = [];
+    xmlStructure.node.node.forEach((node: any) => {
+        const data = convertNodeToDataRow(node, null);
         rows.push(data);
         if (Object.prototype.toString.call(node.node) === '[object Array]') {
-            node.node.forEach(function (node: any) {
+            node.node.forEach((node: any) => {
                 rows.push(convertNodeToDataRow(node, data));
             })
         } else if (node.node !== undefined) {

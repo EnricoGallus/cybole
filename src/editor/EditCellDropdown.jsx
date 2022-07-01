@@ -30,7 +30,7 @@ class EditCellDropdown extends React.PureComponent {
                 {editing && this.target && (
                     <Overlay
                         show={editing}
-                        flip={true}
+                        flip
                         rootClose
                         container={container.tableNode}
                         target={this.target.current}

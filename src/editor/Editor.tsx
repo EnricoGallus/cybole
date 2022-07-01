@@ -9,7 +9,7 @@ export enum EDITOR_TYPE {
     DATA_GRID = "1"
 }
 
-function Editor() {
+const Editor = () => {
     const location = useLocation();
     const [editorType, setEditorType] = useState(EDITOR_TYPE.XML);
     const [files, setFiles] = useState([]);
@@ -19,7 +19,7 @@ function Editor() {
     const renderEditor = () => {
         if (editorType === EDITOR_TYPE.XML) {
             return <EditInXmlFormat key={editorKey} fileKey={editorKey} content={content} />
-        } else if (editorType === EDITOR_TYPE.DATA_GRID) {
+        } if (editorType === EDITOR_TYPE.DATA_GRID) {
             return <EditInDataGridFormat key={editorKey} fileKey={editorKey} content={content} />
         }
     }
@@ -36,11 +36,11 @@ function Editor() {
             });
     }
     useEffect(() => {
-        window.electron.getFiles(location.state).then(function (result: any) {
-            let tree: any = [];
+        window.electron.getFiles(location.state).then((result: any) => {
+            const tree: any = [];
             tree.push(result);
             setFiles(tree);
-        }, function (error: any) {
+        }, (error: any) => {
             console.log(error);
         });
     }, [location.state]);

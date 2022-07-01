@@ -3,7 +3,7 @@ import {createRef, useState} from "react";
 import {DocSpec, Xml} from "react-xml-editor/lib/types";
 import "react-xml-editor/css/xonomy.css"
 
-function EditInXmlFormat(props: any) {
+const EditInXmlFormat = (props: any) => {
     const [xml] = useState(props.content);
     const [editorKey] = useState(props.fileKey);
     const xmlEditorRef = createRef<XmlEditor>();
