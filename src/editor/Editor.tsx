@@ -1,6 +1,6 @@
 import {Link, useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
-import {Grid, Radio, Tree} from "@geist-ui/core";
+import {Grid, Page, Radio, Tree} from "@geist-ui/core";
 import EditInXmlFormat from "./EditInXmlFormat";
 import EditInDataGridFormat from "./EditInDataGridFormat";
 
@@ -46,27 +46,28 @@ function Editor() {
     }, [location.state]);
 
     return (
-        // eslint-disable-next-line react/jsx-no-undef
-        <Grid.Container id="editor">
-            <Grid xs={12}>
-                Editor
-            </Grid>
-            <Grid xs={12}>
-                <Link to="/" className="btn btn-primary">Back to ProjectSelection</Link>
-            </Grid>
-            <Grid xs={24}>
-                <Radio.Group value={editorType} onChange={editorTypeChanged}>
-                    <Radio value="0">XML</Radio>
-                    <Radio value="1">DataGrid</Radio>
-                </Radio.Group>
-            </Grid>
-            <Grid xs={6}>
-                <Tree value={files} onClick={fileIsSelected}/>
-            </Grid>
-            <Grid xs={18}>
-                {renderEditor()}
-            </Grid>
-        </Grid.Container>
+        <Page>
+            <Grid.Container id="editor">
+                <Grid xs={12}>
+                    Editor
+                </Grid>
+                <Grid xs={12}>
+                    <Link to="/" className="btn btn-primary">Back to ProjectSelection</Link>
+                </Grid>
+                <Grid xs={24}>
+                    <Radio.Group value={editorType} onChange={editorTypeChanged}>
+                        <Radio value="0">XML</Radio>
+                        <Radio value="1">DataGrid</Radio>
+                    </Radio.Group>
+                </Grid>
+                <Grid xs={6}>
+                    <Tree value={files} onClick={fileIsSelected}/>
+                </Grid>
+                <Grid xs={18}>
+                    {renderEditor()}
+                </Grid>
+            </Grid.Container>
+        </Page>
     )
 }
 

@@ -7,7 +7,7 @@ import {Routes, Route, HashRouter} from "react-router-dom";
 import Editor from "./editor/Editor";
 import ProjectSelector from "./startScreen/ProjectSelector";
 import Setting from "./startScreen/Setting";
-import {CssBaseline, GeistProvider } from '@geist-ui/core';
+import {CssBaseline, GeistProvider} from '@geist-ui/core';
 import * as Sentry from "@sentry/electron/renderer";
 Sentry.init({ dsn: "https://639261e8fe5846fa8d3a4e78131d5f64@o367548.ingest.sentry.io/6425628" });
 
