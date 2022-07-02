@@ -6,26 +6,27 @@ import {Button, ButtonGroup} from "@geist-ui/core";
 import {PlusSquare, Trash} from "@geist-ui/icons";
 import { v4 as uuidv4 } from 'uuid';
 
-import EditCellDropdown from "./EditCellDropdown";
-import EditCellInput from "./EditCellInput";
+import EditCell from "./EditCell";
 
-function convertNodeToDataRow(node: any, parent: any): DataRow {
+function convertNodeToDataRow(node: CybolNode, parent: DataRow | null): DataRow {
     const index = uuidv4();
     return { id: `${index}`, parentId: parent != null ? parent.id : null, name: node.name, channel: node.channel, format: node.format, model: node.model, children: [] };
 }
 
 function convertContentToTableFormat(content: string): DataRow[] {
-    var xmlStructure = new XMLParser({ignoreAttributes: false, attributeNamePrefix: ""}).parse(content),
-        rows: DataRow[] = [];
-    xmlStructure.node.node.forEach(function (node: any) {
-        var data = convertNodeToDataRow(node, null);
+    const xmlStructure = new XMLParser({ignoreAttributes: false, attributeNamePrefix: ""}).parse(content) as XmlStructure;
+    const rows: DataRow[] = [];
+    xmlStructure.node.node.forEach((node: CybolNode) => {
+        const data = convertNodeToDataRow(node, null);
         rows.push(data);
-        if (Object.prototype.toString.call(node.node) === '[object Array]') {
-            node.node.forEach(function (node: any) {
-                rows.push(convertNodeToDataRow(node, data));
-            })
-        } else if (node.node !== undefined) {
-            rows.push(convertNodeToDataRow(node.node, data));
+        if (node.node !== undefined) {
+            if (Array.isArray(node.node)) {
+                node.node.forEach(childNode => {
+                    rows.push(convertNodeToDataRow(childNode, data));
+                })
+            } else if (node.node !== undefined) {
+                rows.push(convertNodeToDataRow(node.node, data));
+            }
         }
     })
 
@@ -36,40 +37,27 @@ type TableState = {
     data: DataRow[]
 }
 
-type TableProps = {
-    content: String,
-    fileKey: String
-}
+const channelTypes = ['test', 'test2'];
 
-export default class EditInDataGridFormat extends React.Component<TableProps, TableState> {
-    constructor(props: any) {
-        super(props);
-        this.state = { data: unflatten(convertContentToTableFormat(props.content)) };
-    }
-
-    updateData(newData: DataRow[]) {
-        this.setState((state) => {
-            return {data: newData}
-        });
-    }
-
+export default class EditInDataGridFormat extends React.Component<EditorProps, TableState> {
     expandColumnKey = `name`;
+
     columns: ColumnShape<DataRow>[] = [
         {
             key: `name`,
             dataKey: `name`,
             title: `name`,
             width: 150,
-            // @ts-ignore
-            cellRenderer: EditCellDropdown
+            cellRenderer: ({ cellData, container }) =>
+                <EditCell cellData={cellData as string} container={container} renderType="input" />
         },
         {
             key: `channel`,
             dataKey: `channel`,
             title: `channel`,
             width: 150,
-            // @ts-ignore
-            cellRenderer: EditCellInput
+            cellRenderer: ({ cellData, container }) =>
+                <EditCell cellData={cellData as string} container={container} renderType="select"  selectValues={channelTypes} />
         },
         {
             key: `format`,
@@ -94,33 +82,40 @@ export default class EditInDataGridFormat extends React.Component<TableProps, Ta
                     <Button icon={<PlusSquare />}
                             onClick={() => {
                                 const newRow = {id: uuidv4(), parentId: null, name: 'test', channel: '', format: '', model: '', children: []};
-                                const index = this.state.data.findIndex(s => s.id === rowData.id) + 1;
-                                this.updateData([
-                                    ...this.state.data.slice(0, index),
-                                    newRow,
-                                    ...this.state.data.slice(index)]);
+                                const { data } = this.state;
+                                const index = data.findIndex(s => s.id === rowData.id) + 1;
+                                this.updateData([...data.slice(0, index), newRow, ...data.slice(index)]);
                             }}
                     />
                     {rowData.parentId == null ?
-                    <Button icon={<PlusSquare />}
-                            onClick={() => {
-                                const index = uuidv4();
-                                const newChild = {id: `${index}`, parentId: `${rowData.id}`, name: '', channel: '', format: '', model: '', children: []};
-                                this.updateData(this.state.data.map(item =>
-                                    item.id === rowData.id
-                                        ? {...item, children: [...item.children, newChild]}
-                                        : item));
-                            }}>
-                    </Button> : ''}
+                        <Button icon={<PlusSquare />}
+                                onClick={() => {
+                                    const index = uuidv4();
+                                    const newChild = {id: `${index}`, parentId: `${rowData.id}`, name: '', channel: '', format: '', model: '', children: []};
+                                    const { data } = this.state;
+                                    this.updateData(data.map(item =>
+                                        item.id === rowData.id
+                                            ? {...item, children: [...item.children, newChild]}
+                                            : item));
+                                }} /> : ''}
                     <Button icon={<Trash />} type="error" ghost
                             onClick={() => {
-                                this.updateData(this.state.data.filter(x => x.id !== rowData.id));
-                            }}>
-                    </Button>
+                                const { data } = this.state;
+                                this.updateData(data.filter(x => x.id !== rowData.id));
+                            }} />
                 </ButtonGroup>
             ),
         },
     ];
+
+    constructor(props: EditorProps) {
+        super(props);
+        this.state = { data: unflatten(convertContentToTableFormat(props.content)) };
+    }
+
+    updateData(newData: DataRow[]) {
+        this.setState(() => ({data: newData}));
+    }
 
     render() {
         const {data} = this.state;

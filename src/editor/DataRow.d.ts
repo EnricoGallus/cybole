@@ -1,4 +1,4 @@
-declare type DataRow = {
+type DataRow = {
     id: string,
     parentId: string | null,
     name: string;

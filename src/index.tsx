@@ -1,14 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import reportWebVitals from './reportWebVitals';
+import {Routes, Route, HashRouter} from "react-router-dom";
+import {CssBaseline, GeistProvider} from '@geist-ui/core';
+import * as Sentry from "@sentry/electron/renderer";
 
 import './index.css';
-import {Routes, Route, HashRouter} from "react-router-dom";
+
 import Editor from "./editor/Editor";
 import ProjectSelector from "./startScreen/ProjectSelector";
 import Setting from "./startScreen/Setting";
-import {CssBaseline, GeistProvider} from '@geist-ui/core';
-import * as Sentry from "@sentry/electron/renderer";
+import reportWebVitals from './reportWebVitals';
+
 Sentry.init({ dsn: "https://639261e8fe5846fa8d3a4e78131d5f64@o367548.ingest.sentry.io/6425628" });
 
 const root = ReactDOM.createRoot(
@@ -32,4 +34,4 @@ root.render(
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))
 // or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals(console.log);
+reportWebVitals();
