@@ -1,3 +1,6 @@
+[![codecov](https://codecov.io/gh/EnricoGallus/cybole/branch/master/graph/badge.svg)](https://codecov.io/gh/EnricoGallus/cybole)
+[![Known Vulnerabilities](https://snyk.io/test/github/EnricoGallus/cybole/master/badge.svg)](https://snyk.io/test/github/EnricoGallus/cybole)
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -4,15 +4,15 @@ import {MemoryRouter} from 'react-router-dom'
 import ProjectOpen from './ProjectOpen';
 
 
-describe('ProjectOpen', function () {
+describe('ProjectOpen', () => {
 
     test('renders component', () => {
-        var {container} = render(<ProjectOpen/>, {wrapper: MemoryRouter});
+        const {container} = render(<ProjectOpen/>, {wrapper: MemoryRouter});
 
         expect(container).toMatchSnapshot();
     });
 
-    test('openDirectoryDialog should set selected directory to input', async function () {
+    test('openDirectoryDialog should set selected directory to input', async () => {
         const electronMock = {
             openDialog: jest.fn().mockReturnValue(Promise.resolve({filePaths: ['directory']})),
             getFiles: jest.fn(),
@@ -23,7 +23,7 @@ describe('ProjectOpen', function () {
 
         render(<ProjectOpen/>, {wrapper: MemoryRouter});
 
-        var input = screen.getByLabelText('project-directory-input');
+        const input = screen.getByLabelText('project-directory-input');
 
         fireEvent.click(input);
 

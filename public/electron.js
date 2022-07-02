@@ -113,12 +113,12 @@ app.whenReady().then(() => {
         return dialog[method](params);
     });
 
-    ipcMain.handle('getFiles', (event, params) => {
-        return list(params.directory);
+    ipcMain.handle('getFiles', (event, directory) => {
+        return list(directory);
     });
 
-    ipcMain.handle('readFile', (event, params) => {
-        return fs.readFileSync(path.join(params.basePath.directory, '..', params.relativePath), 'utf8');
+    ipcMain.handle('readFile', (event, basePath, relativePathToFile) => {
+        return fs.readFileSync(path.join(basePath, '..', relativePathToFile), 'utf8');
     });
 
     app.on("activate", function () {
