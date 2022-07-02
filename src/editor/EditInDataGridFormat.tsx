@@ -6,8 +6,7 @@ import {Button, ButtonGroup} from "@geist-ui/core";
 import {PlusSquare, Trash} from "@geist-ui/icons";
 import { v4 as uuidv4 } from 'uuid';
 
-import EditCellDropdown from "./EditCellDropdown";
-import EditCellInput from "./EditCellInput";
+import EditCell from "./EditCell";
 
 function convertNodeToDataRow(node: CybolNode, parent: DataRow | null): DataRow {
     const index = uuidv4();
@@ -38,6 +37,8 @@ type TableState = {
     data: DataRow[]
 }
 
+const channelTypes = ['test', 'test2'];
+
 export default class EditInDataGridFormat extends React.Component<EditorProps, TableState> {
     expandColumnKey = `name`;
 
@@ -47,16 +48,16 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
             dataKey: `name`,
             title: `name`,
             width: 150,
-            // @ts-ignore
-            cellRenderer: EditCellDropdown
+            cellRenderer: ({ cellData, container }) =>
+                <EditCell cellData={cellData as string} container={container} renderType="input" />
         },
         {
             key: `channel`,
             dataKey: `channel`,
             title: `channel`,
             width: 150,
-            // @ts-ignore
-            cellRenderer: EditCellInput
+            cellRenderer: ({ cellData, container }) =>
+                <EditCell cellData={cellData as string} container={container} renderType="select"  selectValues={channelTypes} />
         },
         {
             key: `format`,
@@ -107,7 +108,7 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
         },
     ];
 
-    constructor(props: any) {
+    constructor(props: EditorProps) {
         super(props);
         this.state = { data: unflatten(convertContentToTableFormat(props.content)) };
     }
