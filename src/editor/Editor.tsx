@@ -1,11 +1,12 @@
 import {Link, useLocation} from "react-router-dom";
 import {useEffect, useState} from "react";
 import {Grid, Page, Radio, Tree} from "@geist-ui/core";
-import EditInXmlFormat from "./EditInXmlFormat";
-import EditInDataGridFormat from "./EditInDataGridFormat";
 import {TreeFile} from "@geist-ui/core/dist/tree";
 
-export enum EDITOR_TYPE {
+import EditInXmlFormat from "./EditInXmlFormat";
+import EditInDataGridFormat from "./EditInDataGridFormat";
+
+export enum EditorType {
     XML= "0",
     DATA_GRID = "1"
 }
@@ -17,28 +18,32 @@ interface LocationStateType {
 const Editor = () => {
     const location = useLocation();
     const locationState = location.state as LocationStateType;
-    const [editorType, setEditorType] = useState(EDITOR_TYPE.XML);
+    const [editorType, setEditorType] = useState<string | number>(EditorType.XML);
     const [files, setFiles] = useState<TreeFile[]>([]);
     const [content, setContent] = useState('');
     const [editorKey, setEditorKey] = useState('');
 
     const renderEditor = () => {
-        if (editorType === EDITOR_TYPE.XML) {
+        if (editorType === EditorType.XML) {
             return <EditInXmlFormat key={editorKey} fileKey={editorKey} content={content} />
-        } if (editorType === EDITOR_TYPE.DATA_GRID) {
+        }
+
+        if (editorType === EditorType.DATA_GRID) {
             return <EditInDataGridFormat key={editorKey} fileKey={editorKey} content={content} />
         }
+
+        throw new Error('Unknown EditorType');
     }
 
-    const editorTypeChanged = (val: any) => {
+    const editorTypeChanged = (val: string | number) => {
         setEditorType(val);
     }
 
     const fileIsSelected = (item: string) => {
         window.electron.readFile(locationState.directory, item)
-            .then((content: string) => {
+            .then((result: string) => {
                 setEditorKey(item);
-                setContent(content);
+                setContent(result);
             });
     }
     useEffect(() => {
@@ -46,8 +51,8 @@ const Editor = () => {
             const tree: TreeFile[] = [];
             tree.push(result);
             setFiles(tree);
-        }, (error: any) => {
-            console.log(error);
+        }, (error: string) => {
+            throw new Error(error);
         });
     }, [locationState.directory]);
 

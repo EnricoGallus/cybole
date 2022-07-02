@@ -3,9 +3,10 @@ import {createRef, useState} from "react";
 import {DocSpec, Xml} from "react-xml-editor/lib/types";
 import "react-xml-editor/css/xonomy.css"
 
-const EditInXmlFormat = (props: any) => {
-    const [xml] = useState(props.content);
-    const [editorKey] = useState(props.fileKey);
+const EditInXmlFormat = (props: EditorProps) => {
+    const {content, fileKey} = props;
+    const [xmlContent] = useState(content);
+    const [editorKey] = useState(fileKey);
     const xmlEditorRef = createRef<XmlEditor>();
     const nodeDef = '<node name="" channel="" format="" model=""/>';
     const cybolDef: DocSpec = {
@@ -44,7 +45,7 @@ const EditInXmlFormat = (props: any) => {
                 menu: [{
                     action: Util.newElementChild(nodeDef),
                     caption: 'Append child <node />',
-                }, {
+                }, /* {
                     action: Util.newAttribute({
                         name: 'label',
                         value: 'default value',
@@ -54,7 +55,7 @@ const EditInXmlFormat = (props: any) => {
                         const element = Util.getXmlNode(xml, id);
                         return element && element.$ && typeof element.$.label !== 'undefined';
                     },
-                }, {
+                }, */ {
                     action: Util.deleteElement,
                     caption: 'Delete this <node />',
                     icon: 'exclamation.png',
@@ -84,7 +85,7 @@ const EditInXmlFormat = (props: any) => {
         <XmlEditor key={editorKey}
                    docSpec={cybolDef}
                    ref={xmlEditorRef}
-                   xml={xml}/>
+                   xml={xmlContent}/>
     )
 }
 
