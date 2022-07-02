@@ -5,6 +5,8 @@ module.exports = {
   },
   extends: [
     //'plugin:react/recommended', airbnbにほど設定されているので削除可能
+    'react-app',
+    'react-app/jest',
     'eslint:recommended',
     'airbnb',
     'airbnb-typescript', //追加
@@ -29,46 +31,14 @@ module.exports = {
     'unused-imports' //追加 使っていないimportを自動で削除用
   ],
   rules: {
-    'no-use-before-define': 'off', //関数や変数が定義される前に使われているとエラーになるデフォルトの機能をoff
-    '@typescript-eslint/no-use-before-define': ["error"], //typescript側のno-use-before-defineを使うようにする
-    'import/prefer-default-export': 'off', //named exportがエラーになるので使えるようにoff
-    '@typescript-eslint/no-unused-vars': 'off', //unused-importsを使うため削除
-    'unused-imports/no-unused-imports': 'error', //不要なimportの削除
-    'unused-imports/no-unused-vars': [ //unused-importsでno-unused-varsのルールを再定義
-      'warn',
-      { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
-    ],
-    'react/function-component-definition': [//アロー関数以外受け付けない設定
-      2,
-      {
-        namedComponents: 'arrow-function',
-        unnamedComponents: 'arrow-function',
-      },
-    ],
-    'no-param-reassign': [2, { props: false }], //パラメーターのプロパティ変更を許可
-    'import/extensions': [ //importのときに以下の拡張子を記述しなくてもエラーにしない
-      'error',
-      {
-        js: 'never',
-        jsx: 'never',
-        ts: 'never',
-        tsx: 'never',
-      },
-    ],
-    'react/jsx-filename-extension': [ //jsx形式のファイル拡張子をjsxもしくはtsxに限定
-      'error',
-      {
-        extensions: ['.jsx', '.tsx'],
-      },
-    ],
-    'react/react-in-jsx-scope': 'off', //import React from 'react'が無くてもエラーを無くす
-    'react/prop-types': 'off', //TypeScriptでチェックしているから不要。offにする
-    'no-void': [ //void演算子の許可
-      'error',
-      {
-        allowAsStatement: true,
-      },
-    ],
+    "react/react-in-jsx-scope": "off",
+    //todo should not be turned off
+    "react/function-component-definition": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-unsafe-member-access": "off",
+    "@typescript-eslint/no-floating-promises": "off"
+
   },
   settings: {
     'import/resolver': { //importするファイルをjsだけではなく、tsを含むファイルを許可する

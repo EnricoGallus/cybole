@@ -3,16 +3,22 @@ import {useEffect, useState} from "react";
 import {Grid, Page, Radio, Tree} from "@geist-ui/core";
 import EditInXmlFormat from "./EditInXmlFormat";
 import EditInDataGridFormat from "./EditInDataGridFormat";
+import {TreeFile} from "@geist-ui/core/dist/tree";
 
 export enum EDITOR_TYPE {
     XML= "0",
     DATA_GRID = "1"
 }
 
+interface LocationStateType {
+    directory: string
+}
+
 const Editor = () => {
     const location = useLocation();
+    const locationState = location.state as LocationStateType;
     const [editorType, setEditorType] = useState(EDITOR_TYPE.XML);
-    const [files, setFiles] = useState([]);
+    const [files, setFiles] = useState<TreeFile[]>([]);
     const [content, setContent] = useState('');
     const [editorKey, setEditorKey] = useState('');
 
@@ -28,22 +34,22 @@ const Editor = () => {
         setEditorType(val);
     }
 
-    const fileIsSelected = (item: any) => {
-        window.electron.readFile({basePath: location.state, relativePath: item})
+    const fileIsSelected = (item: string) => {
+        window.electron.readFile(locationState.directory, item)
             .then((content: string) => {
                 setEditorKey(item);
                 setContent(content);
             });
     }
     useEffect(() => {
-        window.electron.getFiles(location.state).then((result: any) => {
-            const tree: any = [];
+        window.electron.getFiles(locationState.directory).then(result => {
+            const tree: TreeFile[] = [];
             tree.push(result);
             setFiles(tree);
         }, (error: any) => {
             console.log(error);
         });
-    }, [location.state]);
+    }, [locationState.directory]);
 
     return (
         <Page>
