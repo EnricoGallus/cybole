@@ -15,8 +15,11 @@ var mainWindow;
 // Create the native browser window.
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1024,
+        height: 768,
+        center: true,
+        minWidth: 800,
+        minHeight: 600,
         // Set the path of an additional "preload" script that can be used to
         // communicate between node-land and browser-land.
         webPreferences: {

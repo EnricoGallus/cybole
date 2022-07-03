@@ -1,22 +1,21 @@
-import React, {BaseSyntheticEvent} from 'react';
-import {Overlay} from 'react-overlays'
+import React, { BaseSyntheticEvent } from 'react';
+import { Overlay } from 'react-overlays';
 import './CellEdit.css';
-import BaseTable from "react-base-table";
+import BaseTable from 'react-base-table';
 
-type PropsType =  {
-    cellData: string
-    renderType: "input" | "select"
-    selectValues?: string[]
-    container: BaseTable<DataRow>
+type PropsType = {
+    cellData: string;
+    renderType: 'input' | 'select';
+    selectValues?: string[];
+    container: BaseTable<DataRow>;
 };
 
 type StateType = {
-    value: string,
-    editing: boolean
-}
+    value: string;
+    editing: boolean;
+};
 
 class EditCellDropdown extends React.PureComponent<PropsType, StateType> {
-
     target = React.createRef<HTMLDivElement>();
 
     constructor(props: PropsType) {
@@ -25,45 +24,48 @@ class EditCellDropdown extends React.PureComponent<PropsType, StateType> {
         this.state = {
             value: cellData,
             editing: false,
-        }
+        };
     }
 
     controlToRender = (renderType: string, selectValues?: string[]) => {
-        const {value} = this.state;
+        const { value } = this.state;
         switch (renderType) {
-            case "select":
-                return (selectValues &&
-                    <select value={value} onChange={(e) => this.handleChange(e, true)}
-                            className="editSelect">
-                        {selectValues.map(select => <option key={select} value={select}>{select}</option>)}
-                    </select>
-                )
+            case 'select':
+                return (
+                    selectValues && (
+                        <select value={value} onChange={(e) => this.handleChange(e, true)} className="editSelect">
+                            {selectValues.map((select) => (
+                                <option key={select} value={select}>
+                                    {select}
+                                </option>
+                            ))}
+                        </select>
+                    )
+                );
             default:
-                return <input value={value} onChange={(e) => this.handleChange(e, false)}
-                              className="editSelect"/>
+                return <input value={value} onChange={(e) => this.handleChange(e, false)} className="editSelect" />;
         }
-    }
+    };
 
-    handleClick = () => this.setState({editing: true})
+    handleClick = () => this.setState({ editing: true });
 
-    handleHide = () => this.setState({editing: false})
+    handleHide = () => this.setState({ editing: false });
 
     handleChange = (e: BaseSyntheticEvent, immediateClose: boolean) => {
-        this.setState({value: e.target.value as string});
+        this.setState({ value: e.target.value as string });
         if (immediateClose) {
-            this.setState({editing: false});
+            this.setState({ editing: false });
         }
-    }
+    };
 
     render() {
-        const {container, renderType, selectValues} = this.props
-        const {value, editing} = this.state
+        const { container, renderType, selectValues } = this.props;
+        const { value, editing } = this.state;
 
         return (
             <div ref={this.target} onClick={this.handleClick} className="editCell">
                 {!editing && value}
                 {editing && this.target && this.target.current && (
-
                     <Overlay
                         show={editing}
                         flip
@@ -72,14 +74,16 @@ class EditCellDropdown extends React.PureComponent<PropsType, StateType> {
                         target={this.target.current}
                         onHide={this.handleHide}
                     >
-                        {({props, placement}) => (
-                            <div {...props}
+                        {({ props, placement }) => (
+                            <div
+                                {...props}
                                 style={{
                                     ...props.style,
                                     width: this.target.current?.offsetWidth,
-                                    top: placement === 'top'
-                                        ? this.target.current?.offsetHeight
-                                        : -(this.target.current?.offsetHeight as number)
+                                    top:
+                                        placement === 'top'
+                                            ? this.target.current?.offsetHeight
+                                            : -(this.target.current?.offsetHeight as number),
                                 }}
                             >
                                 {this.controlToRender(renderType, selectValues)}
@@ -88,7 +92,7 @@ class EditCellDropdown extends React.PureComponent<PropsType, StateType> {
                     </Overlay>
                 )}
             </div>
-        )
+        );
     }
 }
 

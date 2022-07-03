@@ -1,6 +1,6 @@
 type DataRow = {
-    id: string,
-    parentId: string | null,
+    id: string;
+    parentId: string | null;
     name: string;
     channel: string;
     format: string;

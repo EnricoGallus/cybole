@@ -3,11 +3,11 @@ type CybolNode = {
     channel: string;
     format: string;
     model: string;
-    node: CybolNode[] | CybolNode | undefined
+    node: CybolNode[] | CybolNode | undefined;
 };
 
 type XmlStructure = {
     node: {
-        node: CybolNode[]
-    }
-}
+        node: CybolNode[];
+    };
+};
