@@ -2,26 +2,121 @@
 
 exports[`ProjectSelector renders component 1`] = `
 <div>
-  <div
-    class="jsx-3633143255 item jsx-3056732639"
+  <section
+    class="jsx-42076441 "
   >
-    <div
-      class="jsx-3066557810 item xs jsx-3484918754"
+    <header
+      class="jsx-3963558373 "
+    >
+      <h2>
+        Projects
+      </h2>
+    </header>
+    <main
+      class="jsx-1899865532 "
     >
       <div
-        data-testid="project-open"
-      />
-    </div>
-    <div
-      class="jsx-3066557810 item xs jsx-3484918754"
-    >
-      <a
-        class="btn btn-primary"
-        href="/settings"
+        class="jsx-3633143255 item jsx-478091869"
       >
-        To Settings
-      </a>
-    </div>
-  </div>
+        <div
+          class="jsx-2426585010 item xs jsx-2684866274"
+        >
+          <div
+            class="jsx-1887233099 btn-group vertical"
+          >
+            <button
+              class="jsx-1249061632 btn"
+              disabled=""
+              type="button"
+            >
+              <div
+                class="text"
+              />
+            </button>
+            <button
+              class="jsx-489100405 btn"
+              type="button"
+            >
+              <span
+                class="jsx-643337184 icon"
+              >
+                <svg
+                  fill="none"
+                  height="24"
+                  shape-rendering="geometricPrecision"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  style="color: currentColor;"
+                  viewBox="0 0 24 24"
+                  width="24"
+                >
+                  <path
+                    d="M8 6h13M8 12h13M8 18h13M3 6h.01M3 12h.01M3 18h.01"
+                  />
+                </svg>
+              </span>
+              <div
+                class="jsx-887841902 text left"
+              >
+                Projects
+              </div>
+            </button>
+            <button
+              class="jsx-489100405 btn"
+              type="button"
+            >
+              <span
+                class="jsx-643337184 icon"
+              >
+                <svg
+                  fill="none"
+                  height="24"
+                  shape-rendering="geometricPrecision"
+                  stroke="currentColor"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  style="color: currentColor;"
+                  viewBox="0 0 24 24"
+                  width="24"
+                >
+                  <circle
+                    cx="12"
+                    cy="12"
+                    r="3"
+                  />
+                  <path
+                    d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"
+                  />
+                </svg>
+              </span>
+              <div
+                class="jsx-887841902 text left"
+              >
+                Settings
+              </div>
+            </button>
+          </div>
+        </div>
+        <div
+          class="jsx-557291378 item xs jsx-3484918754"
+        >
+          <div
+            class="jsx-3633143255 item jsx-478091869"
+          >
+            <div
+              class="jsx-3563716471 item xs md jsx-3484918754"
+            >
+              <div
+                data-testid="project-open"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+  </section>
 </div>
 `;

@@ -42,8 +42,14 @@ module.exports = {
     "jsx-a11y/click-events-have-key-events": "off",
     "jsx-a11y/no-static-element-interactions": "off",
     "react/require-default-props": "off",
-    "react/jsx-props-no-spreading": "off"
-
+    "react/jsx-props-no-spreading": "off",
+    "@typescript-eslint/ban-types": "off",
+    "@typescript-eslint/no-unnecessary-type-constraint": "off",
+    "@typescript-eslint/require-await": "off",
+    "guard-for-in": "off",
+    "no-restricted-syntax": "off",
+    "react/no-children-prop": "off",
+    "import/prefer-default-export": "off"
   },
   settings: {
     'import/resolver': { //importするファイルをjsだけではなく、tsを含むファイルを許可する

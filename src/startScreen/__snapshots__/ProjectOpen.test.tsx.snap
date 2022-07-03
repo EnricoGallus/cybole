@@ -3,47 +3,96 @@
 exports[`ProjectOpen renders component 1`] = `
 <div>
   <div
-    class="jsx-3633143255 item jsx-478091869"
+    class="jsx-2096050299 fieldset"
   >
     <div
-      class="jsx-3066557810 item xs jsx-3484918754"
+      class="jsx-3523028602 content"
     >
-      Project New
-    </div>
-    <div
-      class="jsx-3066557810 item xs jsx-3484918754"
-    >
-      <div
-        class="jsx-599062270 with-label"
+      <form
+        class="registration-wrapper"
+        novalidate=""
       >
         <div
-          class="jsx-599062270 input-container"
+          class="jsx-3523028602 content"
         >
           <div
-            class="jsx-599062270 input-wrapper"
+            class="jsx-4105044205 title"
           >
-            <input
-              aria-label="project-directory-input"
-              autocomplete="off"
-              class="jsx-599062270 "
-              placeholder=""
-              readonly=""
-              type="text"
-              value=""
-            />
+            Create Project
+          </div>
+          <div
+            class="jsx-2265168013 "
+          >
+            Open an existing Directory as an Cybop Project
           </div>
         </div>
-      </div>
-      <button
-        class="jsx-3108082297 btn"
-        type="button"
-      >
         <div
-          class="text"
+          class="jsx-3523028602 content"
         >
-          Open Project
+          <div
+            class="jsx-556863166 with-label"
+          >
+            <div
+              class="jsx-556863166 input-container"
+            >
+              <span
+                class="jsx-2025932032 "
+              >
+                Project Name
+              </span>
+              <div
+                class="jsx-556863166 input-wrapper  left-label"
+              >
+                <input
+                  autocomplete="off"
+                  class="jsx-556863166 "
+                  placeholder=""
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+          </div>
+          <span
+            class="jsx-2817929712 "
+          />
+          <div
+            class="jsx-556863166 with-label"
+          >
+            <div
+              class="jsx-556863166 input-container"
+            >
+              <span
+                class="jsx-2025932032 "
+              >
+                Project Directory
+              </span>
+              <div
+                class="jsx-556863166 input-wrapper  left-label"
+              >
+                <input
+                  aria-label="project-directory-input"
+                  autocomplete="off"
+                  class="jsx-556863166 "
+                  placeholder=""
+                  readonly=""
+                  type="text"
+                  value=""
+                />
+              </div>
+            </div>
+          </div>
         </div>
-      </button>
+        <footer
+          class="jsx-1747753947 "
+        >
+          <button
+            type="submit"
+          >
+            Create Project
+          </button>
+        </footer>
+      </form>
     </div>
   </div>
 </div>

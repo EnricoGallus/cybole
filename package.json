@@ -1,16 +1,16 @@
 {
   "name": "cybole",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": true,
   "homepage": "./",
   "main": "./public/electron.js",
   "author": "Enrico Gallus <enrico.gallus@gmail.com>",
   "description": "Text-Editor for CYBOL-Projects",
   "dependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.2",
     "@sentry/electron": "^3.0.7",
+    "@testing-library/jest-dom": "^5.16.4",
     "electron-unhandled": "^4.0.1",
     "fast-xml-parser": "^4.0.8",
     "react": "^18.2.0",
@@ -27,6 +27,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^13.3.0",
+    "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^14.2.1",
     "@types/jest": "^28.1.4",
     "@types/node": "^18.0.0",

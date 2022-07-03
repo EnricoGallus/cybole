@@ -1,15 +1,17 @@
 import React from 'react';
-import {render} from '@testing-library/react';
-import {MemoryRouter} from 'react-router-dom'
+import { render } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import ProjectSelector from './ProjectSelector';
-
-jest.mock("./ProjectOpen", () => () => <div data-testid="project-open"/>);
+import { registerElectron } from '../tests/mocks';
 
 describe('ProjectSelector', () => {
-
     test('renders component', () => {
-        const {container} = render(<ProjectSelector/>, {wrapper: MemoryRouter});
+        const electronMock = registerElectron();
+        const { container } = render(<ProjectSelector children={<div data-testid="project-open" />} />, {
+            wrapper: MemoryRouter,
+        });
 
-        expect(container).toMatchSnapshot()
+        expect(container).toMatchSnapshot();
+        expect(electronMock.getAppDescription).toBeCalled();
     });
-})
+});

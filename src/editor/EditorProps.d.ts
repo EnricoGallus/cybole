@@ -1,4 +1,4 @@
 type EditorProps = {
-    content: string,
-    fileKey: string
-}
+    content: string;
+    fileKey: string;
+};

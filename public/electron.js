@@ -15,8 +15,11 @@ var mainWindow;
 // Create the native browser window.
 function createWindow() {
     mainWindow = new BrowserWindow({
-        width: 800,
-        height: 600,
+        width: 1024,
+        height: 768,
+        center: true,
+        minWidth: 800,
+        minHeight: 600,
         // Set the path of an additional "preload" script that can be used to
         // communicate between node-land and browser-land.
         webPreferences: {
@@ -119,6 +122,10 @@ app.whenReady().then(() => {
 
     ipcMain.handle('readFile', (event, basePath, relativePathToFile) => {
         return fs.readFileSync(path.join(basePath, '..', relativePathToFile), 'utf8');
+    });
+
+    ipcMain.handle('getAppDescription', (event) => {
+        return app.getName() + ' ' + app.getVersion();
     });
 
     app.on("activate", function () {
