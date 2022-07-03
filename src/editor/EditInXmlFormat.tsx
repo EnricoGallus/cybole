@@ -1,6 +1,6 @@
 import { Util, XmlEditor } from 'react-xml-editor';
 import { createRef, useState } from 'react';
-import {DocSpec, Xml} from 'react-xml-editor/lib/types';
+import { DocSpec, Xml } from 'react-xml-editor/lib/types';
 import 'react-xml-editor/css/xonomy.css';
 
 const EditInXmlFormat = (props: EditorProps) => {
@@ -25,7 +25,7 @@ const EditInXmlFormat = (props: EditorProps) => {
                             {
                                 value: 'file',
                                 caption: 'file',
-                            }
+                            },
                         ]),
                     },
                     format: {

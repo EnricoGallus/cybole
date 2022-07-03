@@ -1,6 +1,6 @@
 import React from 'react';
 import { XMLParser } from 'fast-xml-parser';
-import BaseTable, {AutoResizer, Column, ColumnShape, unflatten} from 'react-base-table';
+import BaseTable, { AutoResizer, Column, ColumnShape, unflatten } from 'react-base-table';
 import 'react-base-table/styles.css';
 import { Button, ButtonGroup } from '@geist-ui/core';
 import { PlusSquare, Trash } from '@geist-ui/icons';
@@ -83,7 +83,7 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
             width: 150,
             cellRenderer: ({ cellData, container }) => (
                 <EditCell cellData={cellData as string} container={container} renderType="input" />
-            )
+            ),
         },
         {
             key: `model`,
@@ -92,7 +92,7 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
             width: 150,
             cellRenderer: ({ cellData, container }) => (
                 <EditCell cellData={cellData as string} container={container} renderType="input" />
-            )
+            ),
         },
         {
             key: 'action',
