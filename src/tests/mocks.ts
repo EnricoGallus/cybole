@@ -9,6 +9,3 @@ export function registerElectron() {
     window.electron = electronMock;
     return electronMock;
 }
-
-
-
