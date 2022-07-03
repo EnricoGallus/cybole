@@ -1,6 +1,6 @@
 import React from 'react';
 import { XMLParser } from 'fast-xml-parser';
-import BaseTable, { Column, ColumnShape, unflatten } from 'react-base-table';
+import BaseTable, {AutoResizer, Column, ColumnShape, unflatten} from 'react-base-table';
 import 'react-base-table/styles.css';
 import { Button, ButtonGroup } from '@geist-ui/core';
 import { PlusSquare, Trash } from '@geist-ui/icons';
@@ -47,7 +47,7 @@ type TableState = {
     data: DataRow[];
 };
 
-const channelTypes = ['test', 'test2'];
+const channelTypes = ['inline', 'file'];
 
 export default class EditInDataGridFormat extends React.Component<EditorProps, TableState> {
     expandColumnKey = `name`;
@@ -81,16 +81,22 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
             dataKey: `format`,
             title: `format`,
             width: 150,
+            cellRenderer: ({ cellData, container }) => (
+                <EditCell cellData={cellData as string} container={container} renderType="input" />
+            )
         },
         {
             key: `model`,
             dataKey: `model`,
             title: `model`,
             width: 150,
+            cellRenderer: ({ cellData, container }) => (
+                <EditCell cellData={cellData as string} container={container} renderType="input" />
+            )
         },
         {
             key: 'action',
-            width: 150,
+            width: 200,
             align: Column.Alignment.CENTER,
             frozen: Column.FrozenDirection.RIGHT,
             cellRenderer: ({ rowData }) => (
@@ -165,15 +171,19 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
     render() {
         const { data } = this.state;
         return (
-            <div>
-                <BaseTable
-                    data={data}
-                    width={800}
-                    height={600}
-                    fixed
-                    columns={this.columns}
-                    expandColumnKey={this.expandColumnKey}
-                />
+            <div className="tableContainer">
+                <AutoResizer>
+                    {({ width, height }) => (
+                        <BaseTable
+                            data={data}
+                            width={width}
+                            height={height}
+                            fixed
+                            columns={this.columns}
+                            expandColumnKey={this.expandColumnKey}
+                        />
+                    )}
+                </AutoResizer>
             </div>
         );
     }

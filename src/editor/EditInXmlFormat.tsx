@@ -1,6 +1,6 @@
 import { Util, XmlEditor } from 'react-xml-editor';
 import { createRef, useState } from 'react';
-import { DocSpec, Xml } from 'react-xml-editor/lib/types';
+import {DocSpec, Xml} from 'react-xml-editor/lib/types';
 import 'react-xml-editor/css/xonomy.css';
 
 const EditInXmlFormat = (props: EditorProps) => {
@@ -15,51 +15,24 @@ const EditInXmlFormat = (props: EditorProps) => {
                 attributes: {
                     name: {
                         asker: Util.askString,
-                        menu: [
-                            {
-                                action: Util.deleteAttribute,
-                                caption: 'Delete attribute',
-                            },
-                        ],
                     },
                     channel: {
                         asker: Util.askPicklist([
                             {
-                                value: 'short',
-                                caption: 'short',
+                                value: 'inline',
+                                caption: 'inline',
                             },
                             {
-                                value: 'medium',
-                                caption: 'medium',
-                            },
-                            'long',
+                                value: 'file',
+                                caption: 'file',
+                            }
                         ]),
                     },
                     format: {
-                        asker: Util.askPicklist([
-                            {
-                                value: 'short',
-                                caption: 'short',
-                            },
-                            {
-                                value: 'medium',
-                                caption: 'medium',
-                            },
-                            'long',
-                        ]),
+                        asker: Util.askString,
                     },
                     model: {
-                        asker: Util.askPicklist([
-                            {
-                                value: 'short',
-                                caption: 'short',
-                            },
-                            {
-                                value: 'medium',
-                                caption: 'medium',
-                            },
-                            'long',
-                        ]),
+                        asker: Util.askString,
                     },
                 },
                 menu: [
