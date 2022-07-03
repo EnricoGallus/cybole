@@ -10,6 +10,7 @@ process.once("loaded", () => {
     contextBridge.exposeInMainWorld('electron', {
         openDialog: (method, config) => ipcRenderer.invoke('dialog', method, config),
         getFiles: (directory) => ipcRenderer.invoke('getFiles', directory),
-        readFile: (basePath, relativePathToFile) => ipcRenderer.invoke('readFile', basePath, relativePathToFile)
+        readFile: (basePath, relativePathToFile) => ipcRenderer.invoke('readFile', basePath, relativePathToFile),
+        getAppDescription: () => ipcRenderer.invoke('getAppDescription'),
     });
 });

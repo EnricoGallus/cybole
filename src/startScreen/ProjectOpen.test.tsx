@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import ProjectOpen from './ProjectOpen';
+import {registerElectron} from "../tests/mocks";
 
 describe('ProjectOpen', () => {
     test('renders component', () => {
@@ -11,14 +12,7 @@ describe('ProjectOpen', () => {
     });
 
     test('openDirectoryDialog should set selected directory to input', async () => {
-        const electronMock = {
-            openDialog: jest.fn().mockReturnValue(Promise.resolve({ filePaths: ['directory'] })),
-            getFiles: jest.fn(),
-            readFile: jest.fn(),
-        };
-
-        window.electron = electronMock;
-
+        let electronMock = registerElectron();
         render(<ProjectOpen />, { wrapper: MemoryRouter });
 
         const input = screen.getByLabelText('project-directory-input');

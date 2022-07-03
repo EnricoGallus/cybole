@@ -124,6 +124,10 @@ app.whenReady().then(() => {
         return fs.readFileSync(path.join(basePath, '..', relativePathToFile), 'utf8');
     });
 
+    ipcMain.handle('getAppDescription', (event) => {
+        return app.getName() + ' ' + app.getVersion();
+    });
+
     app.on("activate", function () {
         // On macOS it's common to re-create a window in the app when the
         // dock icon is clicked and there are no other windows open.

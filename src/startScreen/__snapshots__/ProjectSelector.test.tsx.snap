@@ -25,6 +25,15 @@ exports[`ProjectSelector renders component 1`] = `
             class="jsx-1887233099 btn-group vertical"
           >
             <button
+              class="jsx-1249061632 btn"
+              disabled=""
+              type="button"
+            >
+              <div
+                class="text"
+              />
+            </button>
+            <button
               class="jsx-489100405 btn"
               type="button"
             >
