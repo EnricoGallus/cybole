@@ -65,7 +65,7 @@ const EditInXmlFormat = (props: EditorProps) => {
                     },
                     {
                         action: Util.duplicateElement,
-                        caption: 'Copy <node />',
+                        caption: 'Duplicate <node />',
                     },
                     {
                         action: Util.moveElementUp,
