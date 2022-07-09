@@ -1,6 +1,6 @@
 import React from 'react';
 import { XMLParser } from 'fast-xml-parser';
-import BaseTable, { AutoResizer, Column, ColumnShape, unflatten } from 'react-base-table';
+import BaseTable, {AutoResizer, Column, ColumnShape, flattenOnKeys, unflatten} from 'react-base-table';
 import 'react-base-table/styles.css';
 import { Button, ButtonGroup } from '@geist-ui/core';
 import { PlusSquare, Trash } from '@geist-ui/icons';
@@ -107,6 +107,7 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
                             const newRow = {
                                 id: uuidv4(),
                                 parentId: null,
+                                parent: null,
                                 name: 'test',
                                 channel: '',
                                 format: '',
@@ -125,7 +126,8 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
                                 const index = uuidv4();
                                 const newChild = {
                                     id: `${index}`,
-                                    parentId: `${rowData.id}`,
+                                    parentId: rowData.id,
+                                    parent: rowData,
                                     name: '',
                                     channel: '',
                                     format: '',
@@ -141,17 +143,30 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
                                     )
                                 );
                             }}
-                        />
-                    ) : (
-                        ''
-                    )}
+                        />) : ''}
                     <Button
                         icon={<Trash />}
                         type="error"
                         ghost
                         onClick={() => {
                             const { data } = this.state;
-                            this.updateData(data.filter((x) => x.id !== rowData.id));
+                            if (rowData.parentId == null) {
+                                this.updateData(data.filter(x => x.id !== rowData.id))
+                            } else {
+                                const parent = data.find(x => x.id == rowData.parentId);
+                                const newState = data.map(x => {
+                                    if (x.id == rowData.parentId && parent != null) {
+                                        x.children = parent.children.filter(x => x.id !== rowData.id);
+                                    }
+
+                                    return x;
+                                })
+
+                                this.updateData(newState);
+                            }
+
+                            const flattenStructure = flattenOnKeys(data);
+                            this.updateData([...unflatten(flattenStructure.filter(x => x.id !== rowData.id))]);
                         }}
                     />
                 </ButtonGroup>
