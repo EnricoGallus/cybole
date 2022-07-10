@@ -1,6 +1,6 @@
 import React from 'react';
 import { XMLParser } from 'fast-xml-parser';
-import BaseTable, {AutoResizer, Column, ColumnShape, flattenOnKeys, unflatten} from 'react-base-table';
+import BaseTable, {AutoResizer, Column, ColumnShape, unflatten} from 'react-base-table';
 import 'react-base-table/styles.css';
 import { Button, ButtonGroup } from '@geist-ui/core';
 import { PlusSquare, Trash } from '@geist-ui/icons';
@@ -41,6 +41,51 @@ function convertContentToTableFormat(content: string): DataRow[] {
     });
 
     return rows;
+}
+
+function mapDataRow(data: DataRow[], idToRemove: string | null, addNewAfterId: string | null, addNewChildAfterId: string | null) {
+
+    const newArray: DataRow[] = [];
+
+    function newRow(parent: DataRow | null) {
+        return {
+            id: uuidv4(),
+            parentId: parent != null ? parent.id : null,
+            name: 'new Node',
+            channel: '',
+            format: '',
+            model: '',
+            children: [],
+        };
+    }
+
+    function loop(rows: DataRow[], parent: DataRow | null) {
+        if (idToRemove && rows.some((row) => row.id === idToRemove)) {
+            rows = rows.filter(x => x.id !== idToRemove)
+        }
+
+        if (addNewAfterId && rows.some((row) => row.id === addNewAfterId)) {
+            const index = rows.findIndex((s) => s.id === addNewAfterId) + 1;
+            rows = [...rows.slice(0, index), newRow(parent), ...rows.slice(index)]
+        }
+
+        Object.entries(rows).forEach(entry => {
+            const row = {...entry[1], children: []}
+            parent == null ? newArray.push(row) : parent.children.push(row);
+            let children = entry[1].children
+            if (addNewChildAfterId && entry[1].id == addNewChildAfterId) {
+                children = [...children, newRow(entry[1])]
+            }
+
+            if(children.length) {
+                loop(children, row);
+            }
+        });
+    }
+
+    loop(data, null);
+
+    return newArray;
 }
 
 type TableState = {
@@ -104,69 +149,27 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
                     <Button
                         icon={<PlusSquare />}
                         onClick={() => {
-                            const newRow = {
-                                id: uuidv4(),
-                                parentId: null,
-                                parent: null,
-                                name: 'test',
-                                channel: '',
-                                format: '',
-                                model: '',
-                                children: [],
-                            };
                             const { data } = this.state;
-                            const index = data.findIndex((s) => s.id === rowData.id) + 1;
-                            this.updateData([...data.slice(0, index), newRow, ...data.slice(index)]);
+                            const newData = mapDataRow(data, null, rowData.id, null);
+                            this.updateData(newData);
                         }}
                     />
-                    {rowData.parentId == null ? (
-                        <Button
-                            icon={<PlusSquare />}
-                            onClick={() => {
-                                const index = uuidv4();
-                                const newChild = {
-                                    id: `${index}`,
-                                    parentId: rowData.id,
-                                    parent: rowData,
-                                    name: '',
-                                    channel: '',
-                                    format: '',
-                                    model: '',
-                                    children: [],
-                                };
-                                const { data } = this.state;
-                                this.updateData(
-                                    data.map((item) =>
-                                        item.id === rowData.id
-                                            ? { ...item, children: [...item.children, newChild] }
-                                            : item
-                                    )
-                                );
-                            }}
-                        />) : ''}
+                    <Button
+                        icon={<PlusSquare />}
+                        onClick={() => {
+                            const { data } = this.state;
+                            const newData = mapDataRow(data, null, null, rowData.id)
+                            this.updateData(newData);
+                        }}
+                    />
                     <Button
                         icon={<Trash />}
                         type="error"
                         ghost
                         onClick={() => {
                             const { data } = this.state;
-                            if (rowData.parentId == null) {
-                                this.updateData(data.filter(x => x.id !== rowData.id))
-                            } else {
-                                const parent = data.find(x => x.id == rowData.parentId);
-                                const newState = data.map(x => {
-                                    if (x.id == rowData.parentId && parent != null) {
-                                        x.children = parent.children.filter(x => x.id !== rowData.id);
-                                    }
-
-                                    return x;
-                                })
-
-                                this.updateData(newState);
-                            }
-
-                            const flattenStructure = flattenOnKeys(data);
-                            this.updateData([...unflatten(flattenStructure.filter(x => x.id !== rowData.id))]);
+                            const newData = mapDataRow(data, rowData.id, null, null);
+                            this.updateData(newData);
                         }}
                     />
                 </ButtonGroup>
