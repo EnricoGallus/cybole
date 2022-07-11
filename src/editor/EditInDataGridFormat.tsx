@@ -1,10 +1,10 @@
 import React from 'react';
-import { XMLParser } from 'fast-xml-parser';
+import {XMLBuilder, XMLParser} from 'fast-xml-parser';
 import BaseTable, {AutoResizer, Column, ColumnShape, unflatten} from 'react-base-table';
 import 'react-base-table/styles.css';
-import { Button, ButtonGroup } from '@geist-ui/core';
-import { PlusSquare, Trash } from '@geist-ui/icons';
-import { v4 as uuidv4 } from 'uuid';
+import {Button, ButtonGroup} from '@geist-ui/core';
+import {PlusSquare, Trash} from '@geist-ui/icons';
+import {v4 as uuidv4} from 'uuid';
 
 import EditCell from './EditCell';
 
@@ -21,8 +21,21 @@ function convertNodeToDataRow(node: CybolNode, parent: DataRow | null): DataRow 
     };
 }
 
+const convertDataRowsToNode = (rows: DataRow[]) : CybolNode[] => rows.map(mapToNode);
+
+const mapToNode = (row: DataRow) : CybolNode => ({
+    name: row.name,
+    channel: row.channel,
+    format: row.format,
+    model: row.model,
+    node: convertDataRowsToNode(row.children),
+});
+
+
+const xmlOptions = {ignoreAttributes: false, attributeNamePrefix: ''};
+
 function convertContentToTableFormat(content: string): DataRow[] {
-    const xmlStructure = new XMLParser({ ignoreAttributes: false, attributeNamePrefix: '' }).parse(
+    const xmlStructure = new XMLParser(xmlOptions).parse(
         content
     ) as XmlStructure;
     const rows: DataRow[] = [];
@@ -77,7 +90,7 @@ function mapDataRow(data: DataRow[], idToRemove: string | null, addNewAfterId: s
                 children = [...children, newRow(entry[1])]
             }
 
-            if(children.length) {
+            if (children.length) {
                 loop(children, row);
             }
         });
@@ -88,6 +101,12 @@ function mapDataRow(data: DataRow[], idToRemove: string | null, addNewAfterId: s
     return newArray;
 }
 
+function saveData(pathToFile:string, data: DataRow[]) {
+    const builder = new XMLBuilder({...xmlOptions, format: true, suppressEmptyNode: true});
+    const xmlOutput = builder.build({node: {node: convertDataRowsToNode(data)}});
+    window.electron.writeFile(pathToFile, xmlOutput);
+}
+
 type TableState = {
     data: DataRow[];
 };
@@ -96,6 +115,7 @@ const channelTypes = ['inline', 'file'];
 
 export default class EditInDataGridFormat extends React.Component<EditorProps, TableState> {
     expandColumnKey = `name`;
+    fileKey = this.props.fileKey;
 
     columns: ColumnShape<DataRow>[] = [
         {
@@ -103,8 +123,9 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
             dataKey: `name`,
             title: `name`,
             width: 150,
-            cellRenderer: ({ cellData, container }) => (
-                <EditCell cellData={cellData as string} container={container} renderType="input" />
+            cellRenderer: ({cellData, container, rowData}) => (
+                <EditCell cellData={cellData as string} container={container} rowData={rowData} property="name"
+                          renderType="input" saveHandler={() => saveData(this.fileKey, container.getExpandedState().expandedData)}/>
             ),
         },
         {
@@ -112,12 +133,13 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
             dataKey: `channel`,
             title: `channel`,
             width: 150,
-            cellRenderer: ({ cellData, container }) => (
+            cellRenderer: ({cellData, container, rowData}) => (
                 <EditCell
                     cellData={cellData as string}
                     container={container}
                     renderType="select"
                     selectValues={channelTypes}
+                    saveHandler={() => saveData(this.fileKey, container.getExpandedState().expandedData)} rowData={rowData} property="channel"
                 />
             ),
         },
@@ -126,8 +148,9 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
             dataKey: `format`,
             title: `format`,
             width: 150,
-            cellRenderer: ({ cellData, container }) => (
-                <EditCell cellData={cellData as string} container={container} renderType="input" />
+            cellRenderer: ({cellData, container, rowData}) => (
+                <EditCell cellData={cellData as string} container={container} rowData={rowData} property="format"
+                          renderType="input" saveHandler={() => saveData(this.fileKey, container.getExpandedState().expandedData)}/>
             ),
         },
         {
@@ -135,8 +158,9 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
             dataKey: `model`,
             title: `model`,
             width: 150,
-            cellRenderer: ({ cellData, container }) => (
-                <EditCell cellData={cellData as string} container={container} renderType="input" />
+            cellRenderer: ({cellData, container, rowData}) => (
+                <EditCell cellData={cellData as string} container={container} rowData={rowData} property="model"
+                          renderType="input" saveHandler={() => saveData(this.fileKey, container.getExpandedState().expandedData)}/>
             ),
         },
         {
@@ -144,30 +168,30 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
             width: 200,
             align: Column.Alignment.CENTER,
             frozen: Column.FrozenDirection.RIGHT,
-            cellRenderer: ({ rowData }) => (
+            cellRenderer: ({rowData}) => (
                 <ButtonGroup>
                     <Button
-                        icon={<PlusSquare />}
+                        icon={<PlusSquare/>}
                         onClick={() => {
-                            const { data } = this.state;
+                            const {data} = this.state;
                             const newData = mapDataRow(data, null, rowData.id, null);
                             this.updateData(newData);
                         }}
                     />
                     <Button
-                        icon={<PlusSquare />}
+                        icon={<PlusSquare/>}
                         onClick={() => {
-                            const { data } = this.state;
+                            const {data} = this.state;
                             const newData = mapDataRow(data, null, null, rowData.id)
                             this.updateData(newData);
                         }}
                     />
                     <Button
-                        icon={<Trash />}
+                        icon={<Trash/>}
                         type="error"
                         ghost
                         onClick={() => {
-                            const { data } = this.state;
+                            const {data} = this.state;
                             const newData = mapDataRow(data, rowData.id, null, null);
                             this.updateData(newData);
                         }}
@@ -179,19 +203,20 @@ export default class EditInDataGridFormat extends React.Component<EditorProps, T
 
     constructor(props: EditorProps) {
         super(props);
-        this.state = { data: unflatten(convertContentToTableFormat(props.content)) };
+        this.state = {data: unflatten(convertContentToTableFormat(props.content))};
     }
 
     updateData(newData: DataRow[]) {
-        this.setState(() => ({ data: newData }));
+        this.setState(() => ({data: newData}));
+        saveData(this.fileKey, newData);
     }
 
     render() {
-        const { data } = this.state;
+        const {data} = this.state;
         return (
             <div className="tableContainer">
                 <AutoResizer>
-                    {({ width, height }) => (
+                    {({width, height}) => (
                         <BaseTable
                             data={data}
                             width={width}
