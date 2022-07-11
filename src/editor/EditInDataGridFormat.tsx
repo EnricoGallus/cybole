@@ -85,8 +85,8 @@ function mapDataRow(data: DataRow[], idToRemove: string | null, addNewAfterId: s
         Object.entries(rows).forEach(entry => {
             const row = {...entry[1], children: []}
             parent == null ? newArray.push(row) : parent.children.push(row);
-            let children = entry[1].children
-            if (addNewChildAfterId && entry[1].id == addNewChildAfterId) {
+            let {children} = entry[1]
+            if (addNewChildAfterId && entry[1].id === addNewChildAfterId) {
                 children = [...children, newRow(entry[1])]
             }
 
@@ -115,6 +115,7 @@ const channelTypes = ['inline', 'file'];
 
 export default class EditInDataGridFormat extends React.Component<EditorProps, TableState> {
     expandColumnKey = `name`;
+
     fileKey = this.props.fileKey;
 
     columns: ColumnShape<DataRow>[] = [
