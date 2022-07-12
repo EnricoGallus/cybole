@@ -1,0 +1,11 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditCell renders component 1`] = `
+<div>
+  <div
+    class="editCell"
+  >
+    test
+  </div>
+</div>
+`;

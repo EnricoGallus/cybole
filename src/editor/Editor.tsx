@@ -5,6 +5,7 @@ import { TreeFile } from '@geist-ui/core/dist/tree';
 
 import EditInXmlFormat from './EditInXmlFormat';
 import EditInDataGridFormat from './EditInDataGridFormat';
+import {FileResult} from "./FileResult";
 
 export enum EditorType {
     XML = '0',
@@ -42,10 +43,10 @@ const Editor = () => {
     };
 
     const fileIsSelected = (item: string) => {
-        window.electron.readFile(locationState.directory, item).then((result: string) => {
+        window.electron.readFile(locationState.directory, item).then((result: FileResult) => {
             setShowEditorType(true);
-            setEditorKey(item);
-            setContent(result);
+            setEditorKey(result.fullPathToFile);
+            setContent(result.content);
         });
     };
     useEffect(() => {

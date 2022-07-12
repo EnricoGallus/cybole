@@ -11,6 +11,7 @@ process.once("loaded", () => {
         openDialog: (method, config) => ipcRenderer.invoke('dialog', method, config),
         getFiles: (directory) => ipcRenderer.invoke('getFiles', directory),
         readFile: (basePath, relativePathToFile) => ipcRenderer.invoke('readFile', basePath, relativePathToFile),
+        writeFile: (pathToFile, content) => ipcRenderer.invoke('writeFile', pathToFile, content),
         getAppDescription: () => ipcRenderer.invoke('getAppDescription'),
     });
 });

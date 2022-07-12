@@ -1,4 +1,4 @@
-import { Util, XmlEditor } from 'react-xml-editor';
+import {Builder, Util, XmlEditor} from 'react-xml-editor';
 import { createRef, useState } from 'react';
 import { DocSpec, Xml } from 'react-xml-editor/lib/types';
 import 'react-xml-editor/css/xonomy.css';
@@ -65,7 +65,7 @@ const EditInXmlFormat = (props: EditorProps) => {
                     },
                     {
                         action: Util.duplicateElement,
-                        caption: 'Copy <node />',
+                        caption: 'Duplicate <node />',
                     },
                     {
                         action: Util.moveElementUp,
@@ -82,7 +82,13 @@ const EditInXmlFormat = (props: EditorProps) => {
         },
     };
 
-    return <XmlEditor key={editorKey} docSpec={cybolDef} ref={xmlEditorRef} xml={xmlContent} />;
+    const saveChanges = () => {
+        const xml = xmlEditorRef.current?.getXml();
+        const fileContent = new Builder({}).buildObject(xml as Xml);
+        window.electron.writeFile(fileKey, fileContent);
+    }
+
+    return <XmlEditor key={editorKey} docSpec={cybolDef} ref={xmlEditorRef} xml={xmlContent} onChange={() => saveChanges() } />;
 };
 
 export default EditInXmlFormat;
