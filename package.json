@@ -1,6 +1,6 @@
 {
-  "name": "CYBOLE",
-  "version": "0.1.3",
+  "name": "cybole",
+  "version": "0.1.4",
   "private": true,
   "homepage": "./",
   "main": "./public/electron.js",
