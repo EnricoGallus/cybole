@@ -121,7 +121,15 @@ app.whenReady().then(() => {
     });
 
     ipcMain.handle('readFile', (event, basePath, relativePathToFile) => {
-        return fs.readFileSync(path.join(basePath, '..', relativePathToFile), 'utf8');
+        const fullPathToFile = path.join(basePath, '..', relativePathToFile);
+        return {
+            content: fs.readFileSync(fullPathToFile, 'utf8'),
+            fullPathToFile: fullPathToFile
+        };
+    });
+
+    ipcMain.handle('writeFile', (event, pathToFile, content) => {
+        return fs.writeFileSync(pathToFile, content);
     });
 
     ipcMain.handle('getAppDescription', (event) => {

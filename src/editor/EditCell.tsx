@@ -1,5 +1,5 @@
-import React, { BaseSyntheticEvent } from 'react';
-import { Overlay } from 'react-overlays';
+import React, {BaseSyntheticEvent} from 'react';
+import {Overlay} from 'react-overlays';
 import './CellEdit.css';
 import BaseTable from 'react-base-table';
 
@@ -8,6 +8,9 @@ type PropsType = {
     renderType: 'input' | 'select';
     selectValues?: string[];
     container: BaseTable<DataRow>;
+    saveHandler: Function,
+    rowData: DataRow,
+    property: string
 };
 
 type StateType = {
@@ -20,7 +23,7 @@ class EditCellDropdown extends React.PureComponent<PropsType, StateType> {
 
     constructor(props: PropsType) {
         super(props);
-        const { cellData } = this.props;
+        const {cellData} = this.props;
         this.state = {
             value: cellData,
             editing: false,
@@ -28,7 +31,7 @@ class EditCellDropdown extends React.PureComponent<PropsType, StateType> {
     }
 
     controlToRender = (renderType: string, selectValues?: string[]) => {
-        const { value } = this.state;
+        const {value} = this.state;
         switch (renderType) {
             case 'select':
                 return (
@@ -43,24 +46,37 @@ class EditCellDropdown extends React.PureComponent<PropsType, StateType> {
                     )
                 );
             default:
-                return <input value={value} onChange={(e) => this.handleChange(e, false)} className="editSelect" />;
+                return <input value={value} onChange={(e) => this.handleChange(e, false)} className="editSelect"/>;
         }
     };
 
-    handleClick = () => this.setState({ editing: true });
+    handleClick = () => {
+        this.setState({editing: true});
+    }
 
-    handleHide = () => this.setState({ editing: false });
+    handleHide = () => {
+        const {rowData, property, saveHandler, container} = this.props;
+        const {value} = this.state;
+        // @ts-ignore
+        rowData[property] = value;
+        saveHandler(container.getExpandedState().expandedData)
+        this.setState({editing: false});
+    }
 
     handleChange = (e: BaseSyntheticEvent, immediateClose: boolean) => {
-        this.setState({ value: e.target.value as string });
+        this.setState({value: e.target.value as string});
         if (immediateClose) {
-            this.setState({ editing: false });
+            this.setState({editing: false});
+            const {rowData, property, saveHandler, container} = this.props;
+            // @ts-ignore
+            rowData[property] = e.target.value;
+            saveHandler(container.getExpandedState().expandedData)
         }
     };
 
     render() {
-        const { container, renderType, selectValues } = this.props;
-        const { value, editing } = this.state;
+        const {container, renderType, selectValues} = this.props;
+        const {value, editing} = this.state;
 
         return (
             <div ref={this.target} onClick={this.handleClick} className="editCell">
@@ -74,7 +90,7 @@ class EditCellDropdown extends React.PureComponent<PropsType, StateType> {
                         target={this.target.current}
                         onHide={this.handleHide}
                     >
-                        {({ props, placement }) => (
+                        {({props, placement}) => (
                             <div
                                 {...props}
                                 style={{

@@ -3,6 +3,7 @@ export function registerElectron() {
         openDialog: jest.fn().mockReturnValue(Promise.resolve({ filePaths: ['directory'] })),
         getFiles: jest.fn(),
         readFile: jest.fn(),
+        writeFile: jest.fn(),
         getAppDescription: jest.fn().mockReturnValue(Promise.resolve('Cybole v0.2')),
     };
 
