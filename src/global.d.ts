@@ -1,5 +1,5 @@
 import { TreeFile } from '@geist-ui/core/dist/tree';
-import {FileResult} from "./editor/FileResult";
+import { FileResult } from './editor/FileResult';
 
 export {};
 
@@ -11,6 +11,8 @@ declare global {
             readFile(basePath: string, relativePathToFile: string): Promise<FileResult>;
             writeFile(pathToFile: string, content: string);
             getAppDescription(): Promise<string>;
+            openContextMenu(rowData: DataRow);
+            on: (channel: string, listener: (event: any, ...arg: any) => void) => void;
         };
     }
 }
