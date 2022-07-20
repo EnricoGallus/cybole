@@ -1,5 +1,5 @@
 // Module to control the application lifecycle and the native browser window.
-const { app, BrowserWindow, protocol, ipcMain, dialog } = require("electron");
+const { app, BrowserWindow, Menu, protocol, ipcMain, dialog } = require("electron");
 const path = require("path");
 const url = require("url");
 const fs = require('fs');
@@ -135,6 +135,31 @@ app.whenReady().then(() => {
     ipcMain.handle('getAppDescription', (event) => {
         return app.getName() + ' ' + app.getVersion();
     });
+
+    ipcMain.handle('openContextMenu', (event, rowData) => {
+        const template = [
+            {
+                label: 'Delete',
+                click() {
+                    mainWindow.webContents.send('delete-node', rowData)
+                }
+            },
+            {
+                label: 'Add Node',
+                click() {
+                    mainWindow.webContents.send('add-node', rowData)
+                }
+            },
+            {
+                label: 'Add SubNode',
+                click() {
+                    mainWindow.webContents.send('add-subnode', rowData)
+                }
+            }
+        ];
+        const menu = Menu.buildFromTemplate(template)
+        menu.popup();
+    })
 
     app.on("activate", function () {
         // On macOS it's common to re-create a window in the app when the

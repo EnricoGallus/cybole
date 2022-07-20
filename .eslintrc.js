@@ -49,7 +49,12 @@ module.exports = {
     "guard-for-in": "off",
     "no-restricted-syntax": "off",
     "react/no-children-prop": "off",
-    "import/prefer-default-export": "off"
+    "import/prefer-default-export": "off",
+    "@typescript-eslint/ban-ts-comment": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "no-param-reassign": "off",
+    "@typescript-eslint/no-use-before-define": "off",
+    "react/destructuring-assignment": "off"
   },
   settings: {
     'import/resolver': { //importするファイルをjsだけではなく、tsを含むファイルを許可する

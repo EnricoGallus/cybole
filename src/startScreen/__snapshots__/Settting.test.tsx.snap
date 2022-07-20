@@ -1,0 +1,15 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Setting renders component 1`] = `
+<div>
+  <div>
+    Setting
+    <a
+      class="btn btn-primary"
+      href="/"
+    >
+      Back to Project Selection
+    </a>
+  </div>
+</div>
+`;

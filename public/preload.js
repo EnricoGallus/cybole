@@ -13,5 +13,9 @@ process.once("loaded", () => {
         readFile: (basePath, relativePathToFile) => ipcRenderer.invoke('readFile', basePath, relativePathToFile),
         writeFile: (pathToFile, content) => ipcRenderer.invoke('writeFile', pathToFile, content),
         getAppDescription: () => ipcRenderer.invoke('getAppDescription'),
+        openContextMenu: (rowData) => ipcRenderer.invoke('openContextMenu', rowData),
+        on: (channel, listener) => {
+            ipcRenderer.on(channel, listener);
+        },
     });
 });
