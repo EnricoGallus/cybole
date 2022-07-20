@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import ProjectOpen from './ProjectOpen';
-import { registerElectron } from '../tests/mocks';
+import { registerElectron } from '../mocks';
 
 describe('ProjectOpen', () => {
     test('renders component', () => {
