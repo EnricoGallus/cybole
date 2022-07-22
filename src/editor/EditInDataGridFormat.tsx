@@ -7,6 +7,7 @@ import {PlusSquare, Trash} from '@geist-ui/icons';
 import {v4 as uuidv4} from 'uuid';
 
 import EditCell from './EditCell';
+import {readTextFile, writeTextFile} from "@tauri-apps/api/fs";
 
 function convertNodeToDataRow(node: CybolNode, parent: DataRow | null): DataRow {
     const index = uuidv4();
@@ -104,7 +105,7 @@ function mapDataRow(data: DataRow[], idToRemove: string | null, addNewAfterId: s
 function saveData(pathToFile:string, data: DataRow[]) {
     const builder = new XMLBuilder({...xmlOptions, format: true, suppressEmptyNode: true});
     const xmlOutput = builder.build({node: {node: convertDataRowsToNode(data)}});
-    window.electron.writeFile(pathToFile, xmlOutput);
+    writeTextFile(pathToFile, xmlOutput);
 }
 
 type TableState = {
