@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Fieldset, Input, Spacer, Text } from '@geist-ui/core';
 import { useForm } from '../utils/useForm';
+import { open } from '@tauri-apps/api/dialog';
+import { appDir } from '@tauri-apps/api/path';
 
 interface CreateProject {
     name: string;
@@ -30,24 +32,16 @@ const ProjectOpen = () => {
         onSubmit: () => navigate('/editor', { state: { directory: data.directory } }),
     });
 
-    const selectDirectory = () => {
+    const selectDirectory = async () => {
         setDisableDirectory(true);
-        const dialogConfig = {
-            title: 'Select the Directory of the project',
-            buttonLabel: 'Select Directory',
-            properties: ['openDirectory'],
-        };
-        window.electron
-            .openDialog('showOpenDialog', dialogConfig)
-            .then((result) => {
-                if (!result.canceled) {
-                    setData({ ...data, directory: result.filePaths[0] as string });
-                }
-            })
-            .catch((error) => {
-                throw error;
-            })
-            .finally(() => setDisableDirectory(false));
+        const selected = await open({
+            directory: true,
+            multiple: false,
+        });
+        if (selected !== null) {
+            console.log(selected);
+            setData({...data, directory: selected as string})
+        }
     };
 
     return (
@@ -72,7 +66,7 @@ const ProjectOpen = () => {
                         value={data.directory || ''}
                         readOnly
                         width="100%"
-                        onClick={selectDirectory}
+                        onClick={() => selectDirectory().finally(() => setDisableDirectory(false))}
                     />
                     {errors.directory && (
                         <Text p type="error" className="error">

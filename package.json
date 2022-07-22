@@ -9,7 +9,7 @@
   "dependencies": {
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.2",
-    "@sentry/electron": "^3.0.7",
+    "@tauri-apps/api": "^1.0.2",
     "@testing-library/jest-dom": "^5.16.4",
     "electron-unhandled": "^4.0.1",
     "fast-xml-parser": "^4.0.9",
@@ -26,6 +26,7 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
+    "@tauri-apps/cli": "^1.0.4",
     "@testing-library/react": "^13.3.0",
     "@testing-library/react-hooks": "^8.0.1",
     "@testing-library/user-event": "^14.3.0",
@@ -36,6 +37,7 @@
     "@types/uuid": "^8.3.4",
     "@typescript-eslint/eslint-plugin": "^5.30.7",
     "@typescript-eslint/parser": "^5.30.7",
+    "@vitejs/plugin-react": "^2.0.0",
     "concurrently": "^7.3.0",
     "cross-env": "^7.0.3",
     "electron": "^19.0.8",
@@ -51,18 +53,17 @@
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-unused-imports": "^2.0.0",
     "prettier": "^2.7.1",
+    "vite": "^3.0.0",
     "wait-on": "^6.0.1"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "preview": "vite preview",
+    "tauri:dev": "tauri dev",
+    "tauri:build": "tauri build",
+    "test": "NODE_ENV=test jest",
     "test:coverage": "react-scripts test --watchAll=false --coverage",
-    "eject": "react-scripts eject",
-    "electron:start": "concurrently -k \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electronmon .\"",
-    "electron:package:mac": "yarn build && electron-builder -m -c.extraMetadata.main=build/electron.js",
-    "electron:package:win": "yarn build && electron-builder -w -c.extraMetadata.main=build/electron.js",
-    "electron:package:linux": "yarn build && electron-builder -l -c.extraMetadata.main=build/electron.js",
     "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
     "format": "eslint --cache --fix 'src/**/*.{js,jsx,ts,tsx}' && prettier --write 'src/**/*.{js,jsx,ts,tsx}'"
   },
