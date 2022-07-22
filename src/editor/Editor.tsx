@@ -2,11 +2,10 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { Button, Grid, Page, Select, Spacer, Tree } from '@geist-ui/core';
 import { TreeFile } from '@geist-ui/core/dist/tree';
+import {readDir, readTextFile, FileEntry} from '@tauri-apps/api/fs';
 
 import EditInXmlFormat from './EditInXmlFormat';
 import EditInDataGridFormat from './EditInDataGridFormat';
-import { FileResult } from '../@types/FileResult';
-import React from 'react';
 
 export enum EditorType {
     XML = '0',
@@ -21,46 +20,60 @@ const Editor = () => {
     const location = useLocation();
     const navigator = useNavigate();
     const locationState = location.state as LocationStateType;
-    const [editorType, setEditorType] = useState<string | string[]>(EditorType.XML);
+    const [editorType, setEditorType] = useState<string>('');
     const [showEditType, setShowEditorType] = useState(false);
     const [files, setFiles] = useState<TreeFile[]>([]);
+    const [fileKey, setFileKey] = useState('');
     const [content, setContent] = useState('');
-    const [editorKey, setEditorKey] = useState('');
 
     const renderEditor = () => {
         if (editorType === EditorType.XML) {
-            return <EditInXmlFormat key={editorKey} fileKey={editorKey} content={content} />;
+            return <EditInXmlFormat key={fileKey} fileKey={fileKey} content={content} />;
         }
 
         if (editorType === EditorType.DATA_GRID) {
-            return <EditInDataGridFormat key={editorKey} fileKey={editorKey} content={content} />;
+            return <EditInDataGridFormat key={fileKey} fileKey={fileKey} content={content} />;
         }
-
-        throw new Error('Unknown EditorType');
     };
 
     const editorTypeChanged = (val: string | string[]) => {
-        setEditorType(val);
+        setEditorType(val as string);
     };
 
     const fileIsSelected = (item: string) => {
-        window.electron.readFile(locationState.directory, item).then((result: FileResult) => {
-            setShowEditorType(true);
-            setEditorKey(result.fullPathToFile);
-            setContent(result.content);
-        });
+        readTextFile(item).then((content) => {
+            setShowEditorType(true)
+            setEditorType(EditorType.XML);
+            setFileKey(item);
+            setContent(content);
+        })
+
     };
-    useEffect(() => {
-        window.electron.getFiles(locationState.directory).then(
-            (result) => {
-                const tree: TreeFile[] = [];
-                tree.push(result);
-                setFiles(tree);
-            },
-            (error: string) => {
-                throw new Error(error);
+
+    const processEntries = (entries: FileEntry[], parent: TreeFile) => {
+        for (const entry of entries) {
+            if (entry.children) {
+                let directory: TreeFile = {name: entry.name as string, type: 'directory', files: []};
+                parent.files?.push(directory)
+                processEntries(entry.children, directory)
+            } else {
+                let file: TreeFile = {name: entry.name as string, type: 'file'};
+                parent.files?.push(file)
             }
-        );
+        }
+    }
+
+    useEffect(() => {
+        readDir(locationState.directory, {recursive: true})
+            .then((files) => {
+                let rootNode: TreeFile = {
+                    name: locationState.directory,
+                    type: 'directory',
+                    files: []
+                }
+                processEntries(files, rootNode)
+                setFiles([rootNode]);
+            });
     }, [locationState.directory]);
 
     return (
