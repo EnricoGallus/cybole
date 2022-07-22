@@ -32,7 +32,7 @@ jobs:
         if: matrix.platform == 'ubuntu-latest'
         with:
           name: linux-updater-artifacts
-          path: ./src-tauri/target/release/bundle/*
+          path: ./src-tauri/target/release/bundle/deb/cybole_*.deb
       - uses: actions/upload-artifact@v3
         if: matrix.platform == 'windows-latest'
         with:

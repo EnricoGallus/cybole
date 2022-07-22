@@ -1,11 +1,11 @@
 [package]
-name = "app"
-version = "0.1.0"
-description = "A Tauri App"
-authors = ["you"]
+name = "cybole"
+version = "0.1.3"
+description = "An editor for cybol projects"
+authors = ["Enrico Gallus"]
 license = ""
-repository = ""
-default-run = "app"
+repository = "https://github.com/EnricoGallus/cybole"
+default-run = "cybole"
 edition = "2021"
 rust-version = "1.57"
 
