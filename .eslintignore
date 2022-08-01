@@ -1,6 +1,7 @@
-build/
-public/
-**/node_modules/
-*.config.js
-.*lintrc.js
-/*.*
+node_modules
+dist
+coverage
+out
+public
+jest.config.js
+webpack.config.js
