@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import ProjectSelector from '_renderer/startScreen/ProjectSelector';
-import { registerElectron } from '_tests/mocks';
+import ProjectSelector from './ProjectSelector';
+import { registerElectron } from '../mocks';
 
 describe('ProjectSelector', () => {
     test('renders component', () => {

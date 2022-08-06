@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import EditInXmlFormat from '_renderer/editor/EditInXmlFormat';
+import EditInXmlFormat from './EditInXmlFormat';
 
 describe('EditInXmlFormat', () => {
     test('renders component', () => {

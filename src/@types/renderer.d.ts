@@ -1,8 +1,9 @@
-import {FileResult} from "_renderer/editor/FileResult";
+import {FileResult} from "./FileResult";
 import { TreeFile } from '@geist-ui/core/dist/tree';
+import {OpenDialogOptions, OpenDialogReturnValue} from "electron";
 
 export interface IElectronAPI {
-    openDialog(options: Electron.OpenDialogOptions): Promise<Electron.OpenDialogReturnValue>;
+    openDialog(options: OpenDialogOptions): Promise<OpenDialogReturnValue>;
     getFiles(directory: string): Promise<TreeFile>;
     readFile(basePath: string, relativePathToFile: string): Promise<FileResult>;
     writeFile(pathToFile: string, content: string): void;
