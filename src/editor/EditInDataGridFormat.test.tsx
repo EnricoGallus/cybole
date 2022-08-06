@@ -1,8 +1,8 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import EditInDataGridFormat from '_renderer/editor/EditInDataGridFormat';
-import { registerElectron } from '_tests/mocks';
+import EditInDataGridFormat from './EditInDataGridFormat';
+import { registerElectron } from '../mocks';
 
 describe('EditInDataGridFormat', () => {
     test('renders component', () => {

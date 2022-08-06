@@ -4,7 +4,7 @@ import { Routes, Route, HashRouter } from 'react-router-dom';
 import { CssBaseline, GeistProvider } from '@geist-ui/core';
 import * as Sentry from '@sentry/electron/renderer';
 
-import '_public/styles.css';
+import './index.css';
 
 import Editor from './editor/Editor';
 import ProjectSelector from './startScreen/ProjectSelector';

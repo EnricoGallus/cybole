@@ -1,8 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import ProjectOpen from '_renderer/startScreen/ProjectOpen';
-import { registerElectron } from '_tests/mocks';
+import ProjectOpen from './ProjectOpen';
+import { registerElectron } from '../mocks';
 
 describe('ProjectOpen', () => {
     test('renders component', () => {
@@ -20,7 +20,7 @@ describe('ProjectOpen', () => {
         fireEvent.click(input);
 
         await waitFor(() =>
-            expect(electronMock.openDialog).toBeCalledWith('showOpenDialog', {
+            expect(electronMock.openDialog).toBeCalledWith({
                 title: 'Select the Directory of the project',
                 buttonLabel: 'Select Directory',
                 properties: ['openDirectory'],

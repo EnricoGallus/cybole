@@ -2,34 +2,42 @@
   "name": "cybole",
   "version": "0.1.3",
   "private": true,
-  "homepage": "https://github.com/EnricoGallus/cybole#readme",
-  "main": "./dist/main.bundle.js",
+  "homepage": ".",
+  "main": "build/main.js",
   "author": "Enrico Gallus <enrico.gallus@gmail.com>",
   "description": "Editor for CYBOL-Projects",
   "scripts": {
-    "start": "electron ./dist/main.bundle.js",
-    "dev": "rimraf dist && cross-env NODE_ENV=development webpack --watch --progress --color",
-    "prod": "rimraf dist && cross-env NODE_ENV=production webpack --progress --color",
-    "test": "cross-env NODE_ENV=test jest",
-    "watch-test": "npm run test -- --watchAll",
-    "next-rc": "npm --no-git-tag-version version prerelease --preid=rc",
-    "next-patch": "npm --no-git-tag-version version patch",
-    "next-minor": "npm --no-git-tag-version version minor",
-    "next-major": "npm --no-git-tag-version version major",
-    "build:win": "electron-builder build --win",
-    "build:mac": "electron-builder build --mac"
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "postinstall": "electron-builder install-app-deps",
+    "electron:dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && tsc -p electron -w\" \"wait-on http://localhost:3000 && tsc -p electron && electron .\"",
+    "electron:build": "yarn build && tsc -p electron && electron-builder",
+    "eject": "react-scripts eject"
   },
   "dependencies": {
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.2",
     "@sentry/electron": "^3.0.7",
+    "@testing-library/jest-dom": "^5.16.4",
+    "@testing-library/react": "^13.3.0",
+    "@testing-library/react-hooks": "^8.0.1",
+    "@testing-library/user-event": "^14.4.1",
+    "@types/electron-devtools-installer": "^2.2.2",
+    "@types/jest": "^28.1.6",
+    "@types/node": "16.11.47",
+    "@types/react": "^18.0.15",
+    "@types/react-dom": "^18.0.6",
+    "@types/uuid": "^8.3.4",
+    "electron-devtools-installer": "^3.2.0",
     "electron-log": "^4.4.8",
-    "electron-updater": "^5.0.5",
+    "electron-reload": "^1.5.0",
+    "electron-updater": "^5.2.1",
     "fast-xml-parser": "^4.0.9",
     "react": "^18.2.0",
     "react-base-table": "^1.13.2",
     "react-dom": "^18.2.0",
-    "react-hook-form": "^7.33.1",
+    "react-hook-form": "^7.34.0",
     "react-overlays": "^5.2.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "5.0.1",
@@ -39,59 +47,23 @@
     "web-vitals": "^2.1.4"
   },
   "devDependencies": {
-    "@testing-library/jest-dom": "^5.16.4",
-    "@testing-library/react": "^13.3.0",
-    "@testing-library/react-hooks": "^8.0.1",
-    "@types/jest": "^28.1.6",
-    "@types/react": "^18.0.15",
-    "@types/react-dom": "^18.0.6",
-    "@types/uuid": "^8.3.4",
-    "@typescript-eslint/eslint-plugin": "^5.30.7",
-    "@typescript-eslint/parser": "^5.30.7",
+    "concurrently": "^7.3.0",
     "cross-env": "^7.0.3",
-    "electron": "^19.0.9",
-    "eslint": "^8.20.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-airbnb-typescript": "^17.0.0",
-    "eslint-import-resolver-webpack": "^0.13.2",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jest": "^26.6.0",
-    "eslint-plugin-jsx-a11y": "^6.6.1",
-    "eslint-plugin-react": "^7.30.1",
-    "eslint-plugin-react-hooks": "^4.6.0",
-    "jest": "^28.1.3",
-    "ts-jest": "^28.0.7",
-    "typescript": "^4.7.4"
-  },
-  "optionalDependencies": {
-    "copy-webpack-plugin": "^11.0.0",
-    "css-loader": "^6.7.1",
-    "electron-builder": "^23.1.0",
-    "file-loader": "^6.2.0",
-    "html-webpack-plugin": "^5.5.0",
-    "lodash": "^4.17.21",
-    "rimraf": "^3.0.2",
-    "style-loader": "^3.3.1",
-    "ts-loader": "^9.3.1",
-    "tsconfig-paths": "^4.0.0",
-    "tsconfig-paths-webpack-plugin": "^3.5.2",
-    "webpack": "^5.73.0",
-    "webpack-cli": "^4.10.0"
+    "electron": "^20.0.1",
+    "electron-builder": "^23.3.3",
+    "wait-on": "^6.0.1"
   },
   "build": {
     "appId": "org.electron.cybole",
     "productName": "CYBOLE",
     "files": [
-      "build/**/*",
-      "node_modules/**/*"
+      "build/**/*"
     ],
     "directories": {
-      "app": "./dist/",
-      "output": "./out/"
+      "buildResources": "assets"
     },
     "mac": {
-      "target": "dmg",
-      "arch": "universal"
+      "target": "dmg"
     },
     "win": {
       "target": "nsis"
@@ -109,5 +81,17 @@
   },
   "bugs": {
     "url": "https://github.com/EnricoGallus/cybole/issues"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
   }
 }

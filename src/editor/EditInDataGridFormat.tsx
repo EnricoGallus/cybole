@@ -4,7 +4,7 @@ import BaseTable, { AutoResizer, ColumnShape, unflatten } from 'react-base-table
 import 'react-base-table/styles.css';
 import { v4 as uuidv4 } from 'uuid';
 
-import EditCell from '_renderer/editor/EditCell';
+import EditCell from './EditCell';
 
 function convertNodeToDataRow(node: CybolNode, parent: DataRow | null): DataRow {
     const index = uuidv4();

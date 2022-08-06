@@ -1,13 +1,12 @@
 // Module to control the application lifecycle and the native browser window.
 import { app, BrowserWindow, Menu, ipcMain, dialog } from 'electron';
-import path from 'path';
-import url from "url";
-import fs from 'fs';
-/*import Sentry from "@sentry/electron";*/
-import MenuBuilder from "_main/mainMenu";
+import * as path from 'path';
+import * as fs from 'fs';
+import * as Sentry from "@sentry/electron/main";
 import {autoUpdater} from "electron-updater";
 import {log, error}  from "electron-log";
-/*Sentry.init({ dsn: "https://639261e8fe5846fa8d3a4e78131d5f64@o367548.ingest.sentry.io/6425628" });*/
+import MenuBuilder from "./mainMenu";
+Sentry.init({ dsn: "https://639261e8fe5846fa8d3a4e78131d5f64@o367548.ingest.sentry.io/6425628" });
 
 const isMacOS = process.platform.startsWith('darwin');
 
@@ -67,16 +66,15 @@ function createWindow() {
         // Set the path of an additional "preload" script that can be used to
         // communicate between node-land and browser-land.
         webPreferences: {
-            preload: path.join(__dirname, "./preload.bundle.js"),
-            devTools: process.env.NODE_ENV === "development",
-            webSecurity: process.env.NODE_ENV !== "production"
+            preload: path.resolve(__dirname, 'preload.js'),
         },
     });
 
     // In production, set the initial browser path to the local bundle generated
     // by the Create React App build process.
     // In development, set it to localhost to allow live/hot-reloading.
-    mainWindow.loadFile("index.html").finally(() => {});
+    const indexFile =  app.isPackaged ? `file://${__dirname}/../index.html` : 'http://localhost:3000/index.html';
+    mainWindow.loadURL(indexFile).finally(() => {});
 
     // Automatically open Chrome's DevTools in development mode.
     if (!app.isPackaged) {
@@ -89,7 +87,7 @@ function createWindow() {
 
 function list(dir: string) {
     const walk = (entry: string) => {
-        return new Promise((resolve, reject) => {
+        return new Promise((resolve) => {
             fs.exists(entry, exists => {
                 if (!exists) {
                     return resolve({});
@@ -195,7 +193,7 @@ ipcMain.handle('writeFile', (event, pathToFile, content) => {
     return fs.writeFileSync(pathToFile, content);
 });
 
-ipcMain.handle('getAppDescription', (event) => {
+ipcMain.handle('getAppDescription', () => {
     return app.getName() + ' ' + app.getVersion();
 });
 

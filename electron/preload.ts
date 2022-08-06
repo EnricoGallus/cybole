@@ -13,7 +13,7 @@ process.once("loaded", () => {
         readFile: (basePath: string, relativePathToFile: string) => ipcRenderer.invoke('readFile', basePath, relativePathToFile),
         writeFile: (pathToFile: string, content: string) => ipcRenderer.invoke('writeFile', pathToFile, content),
         getAppDescription: () => ipcRenderer.invoke('getAppDescription'),
-        openContextMenu: (rowData: DataRow) => ipcRenderer.invoke('openContextMenu', rowData),
+        openContextMenu: (rowData: any) => ipcRenderer.invoke('openContextMenu', rowData),
         on: (channel: any, listener: any) => {
             ipcRenderer.on(channel, listener);
         },

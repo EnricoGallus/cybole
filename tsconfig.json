@@ -1,32 +1,26 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "baseUrl": ".",
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "paths": {
-      "_/*": ["src/*"],
-      "_public/*": ["public/*"],
-      "_main/*": ["src/main/*"],
-      "_preload/*": ["src/preload/*"],
-      "_renderer/*": ["src/renderer/*"],
-      "_types/*": ["src/types/*"],
-      "_utils/*": ["src/utils/*"],
-      "_tests/*": ["tests/*"]
-    },
-    "typeRoots": [
-      "./node_modules/@types",
-      "./src/types"
-    ],
-    "sourceMap": true,
-    "allowSyntheticDefaultImports": true,
-    "esModuleInterop": true,
-    "jsx": "react",
-    "target": "ES5",
+    "target": "es5",
     "lib": [
-      "ESNext",
-      "DOM"
-    ]
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "react-jsx"
   },
-  "include": ["src/**/*", "tests/**/*"]
+  "include": [
+    "src"
+  ]
 }

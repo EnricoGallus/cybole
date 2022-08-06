@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Fieldset, Input, Spacer, Text } from '@geist-ui/core';
-import { useForm } from '../../utils/useForm';
-import OpenDialogOptions = Electron.OpenDialogOptions;
+import { useForm } from '../utils/useForm';
+import { OpenDialogOptions} from "electron";
 import React from 'react';
 
 interface CreateProject {

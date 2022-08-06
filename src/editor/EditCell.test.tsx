@@ -1,7 +1,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import EditCell from '_renderer/editor/EditCell';
+import EditCell from './EditCell';
 
 describe('EditCell', () => {
     test('renders component', () => {
