@@ -3,8 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Button, ButtonGroup, Grid, Page } from '@geist-ui/core';
 import { Settings, List } from '@geist-ui/icons';
 
-import './ProjectSelector.css';
-
 type PropsType = {
     children: ReactNode;
 };

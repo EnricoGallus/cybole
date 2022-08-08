@@ -2,6 +2,7 @@ import { Builder, Util, XmlEditor } from 'react-xml-editor';
 import { createRef, useState } from 'react';
 import { DocSpec, Xml } from 'react-xml-editor/lib/types';
 import 'react-xml-editor/css/xonomy.css';
+import React from 'react';
 
 const EditInXmlFormat = (props: EditorProps) => {
     const { content, fileKey } = props;

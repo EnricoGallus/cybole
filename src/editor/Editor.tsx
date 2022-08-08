@@ -5,7 +5,8 @@ import { TreeFile } from '@geist-ui/core/dist/tree';
 
 import EditInXmlFormat from './EditInXmlFormat';
 import EditInDataGridFormat from './EditInDataGridFormat';
-import { FileResult } from './FileResult';
+import { FileResult } from '../@types/FileResult';
+import React from 'react';
 
 export enum EditorType {
     XML = '0',

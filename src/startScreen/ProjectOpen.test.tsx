@@ -20,7 +20,7 @@ describe('ProjectOpen', () => {
         fireEvent.click(input);
 
         await waitFor(() =>
-            expect(electronMock.openDialog).toBeCalledWith('showOpenDialog', {
+            expect(electronMock.openDialog).toBeCalledWith({
                 title: 'Select the Directory of the project',
                 buttonLabel: 'Select Directory',
                 properties: ['openDirectory'],

@@ -1,3 +1,4 @@
+import React from 'react';
 import { Grid } from '@geist-ui/core';
 import { Link } from 'react-router-dom';
 

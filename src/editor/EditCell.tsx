@@ -1,6 +1,5 @@
 import React, { BaseSyntheticEvent } from 'react';
 import { Overlay } from 'react-overlays';
-import './CellEdit.css';
 import BaseTable from 'react-base-table';
 
 type PropsType = {

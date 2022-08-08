@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Fieldset, Input, Spacer, Text } from '@geist-ui/core';
 import { useForm } from '../utils/useForm';
+import { OpenDialogOptions} from "electron";
+import React from 'react';
 
 interface CreateProject {
     name: string;
@@ -32,13 +34,13 @@ const ProjectOpen = () => {
 
     const selectDirectory = () => {
         setDisableDirectory(true);
-        const dialogConfig = {
+        const dialogConfig: OpenDialogOptions = {
             title: 'Select the Directory of the project',
             buttonLabel: 'Select Directory',
             properties: ['openDirectory'],
         };
         window.electron
-            .openDialog('showOpenDialog', dialogConfig)
+            .openDialog(dialogConfig)
             .then((result) => {
                 if (!result.canceled) {
                     setData({ ...data, directory: result.filePaths[0] as string });
