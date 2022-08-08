@@ -73,7 +73,7 @@ function createWindow() {
     // In production, set the initial browser path to the local bundle generated
     // by the Create React App build process.
     // In development, set it to localhost to allow live/hot-reloading.
-    const indexFile =  app.isPackaged ? `file://${__dirname}/../index.html` : 'http://localhost:3000/index.html';
+    const indexFile =  app.isPackaged ? `file://${__dirname}/index.html` : 'http://localhost:3000/index.html';
     mainWindow.loadURL(indexFile).finally(() => {});
 
     // Automatically open Chrome's DevTools in development mode.
