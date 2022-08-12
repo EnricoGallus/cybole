@@ -19,7 +19,7 @@
   "dependencies": {
     "@geist-ui/core": "^2.3.8",
     "@geist-ui/icons": "^1.0.2",
-    "@sentry/electron": "^3.0.7",
+    "@sentry/electron": "^4.0.0",
     "electron-log": "^4.4.8",
     "electron-updater": "^5.2.1",
     "fast-xml-parser": "^4.0.9",
