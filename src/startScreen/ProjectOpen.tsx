@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { Fieldset, Input, Spacer, Text } from '@geist-ui/core';
 import { useForm } from '../utils/useForm';
 import { open } from '@tauri-apps/api/dialog';
-import { appDir } from '@tauri-apps/api/path';
 
 interface CreateProject {
     name: string;
@@ -38,6 +37,7 @@ const ProjectOpen = () => {
             directory: true,
             multiple: false,
         });
+
         if (selected !== null) {
             console.log(selected);
             setData({...data, directory: selected as string})
