@@ -1,12 +1,12 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Routes, Route, HashRouter } from 'react-router-dom';
-import { CssBaseline, GeistProvider } from '@geist-ui/core';
 
 import './index.css';
 import 'primeicons/primeicons.css'
 import 'primereact/resources/themes/bootstrap4-light-blue/theme.css'
 import 'primereact/resources/primereact.min.css'
+import 'primeflex/primeflex.css'
 
 import Editor from './editor/Editor';
 import ProjectSelector from './startScreen/ProjectSelector';
