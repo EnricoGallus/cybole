@@ -1,8 +1,10 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Fieldset, Input, Spacer, Text } from '@geist-ui/core';
 import { useForm } from '../utils/useForm';
 import { open } from '@tauri-apps/api/dialog';
+import {Fieldset} from "primereact/fieldset";
+import {Button} from "primereact/button";
+import {InputText} from "primereact/inputtext";
 
 interface CreateProject {
     name: string;
@@ -45,40 +47,31 @@ const ProjectOpen = () => {
     };
 
     return (
-        <Fieldset width="100%">
-            <form className="registration-wrapper" onSubmit={handleSubmit} noValidate>
-                <Fieldset.Content>
-                    <Fieldset.Title>Create Project</Fieldset.Title>
-                    <Fieldset.Subtitle>Open an existing Directory as an Cybop Project</Fieldset.Subtitle>
-                </Fieldset.Content>
-                <Fieldset.Content>
-                    <Input label="Project Name" value={data.name || ''} onChange={handleChange('name')} width="100%" />
-                    {errors.name && (
-                        <Text p type="error" className="error">
-                            {errors.name}
-                        </Text>
-                    )}
-                    <Spacer h={0.5} />
-                    <Input
-                        label="Project Directory"
+        <form className="registration-wrapper col-6" onSubmit={handleSubmit} noValidate>
+            <Fieldset legend="Create Project">
+                <div className="field">
+                    <InputText
+                        id="projectName"
+                        placeholder="Project Name"
+                        value={data.name || ''}
+                        onChange={handleChange('name')}/>
+                    {errors.name && (<small id="projectName-help" className="p-error block">{errors.name}</small>)}
+                </div>
+                <div className="field">
+                    <InputText
+                        id="projectDirectory"
+                        placeholder="Project Directory"
                         aria-label="project-directory-input"
                         disabled={disableDirectory}
                         value={data.directory || ''}
                         readOnly
-                        width="100%"
                         onClick={() => selectDirectory().finally(() => setDisableDirectory(false))}
                     />
-                    {errors.directory && (
-                        <Text p type="error" className="error">
-                            {errors.directory}
-                        </Text>
-                    )}
-                </Fieldset.Content>
-                <Fieldset.Footer>
-                    <button type="submit">Create Project</button>
-                </Fieldset.Footer>
-            </form>
-        </Fieldset>
+                    {errors.directory && (<small id="projectDirectory-help" className="p-error block">{errors.directory}</small>)}
+                </div>
+                <Button type="submit" label="Create Project" className="mt-2" />
+            </Fieldset>
+        </form>
     );
 };
 

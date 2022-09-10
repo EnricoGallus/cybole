@@ -1,12 +1,13 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Button, Grid, Page, Select, Spacer } from '@geist-ui/core';
 import {readDir, readTextFile, FileEntry} from '@tauri-apps/api/fs';
 
 import EditInXmlFormat from './EditInXmlFormat';
 import EditInDataGridFormat from './EditInDataGridFormat';
 import TreeNode from "primereact/treenode";
 import {Tree, TreeEventNodeParams} from "primereact/tree";
+import {Dropdown, DropdownChangeParams} from "primereact/dropdown";
+import {Button} from "primereact/button";
 
 export enum EditorType {
     XML = '0',
@@ -37,19 +38,23 @@ const Editor = () => {
         }
     };
 
-    const editorTypeChanged = (val: string | string[]) => {
-        setEditorType(val as string);
+    const editorTypeChanged = (event: DropdownChangeParams) => {
+        setEditorType(event.value);
     };
 
     const fileIsSelected = (item: TreeEventNodeParams) => {
         readTextFile(item.node.data.path).then((content) => {
             setShowEditorType(true)
-            setEditorType(EditorType.XML);
+            setEditorType(EditorType.DATA_GRID);
             setFileKey(item.node.data.label);
             setContent(content);
         })
-
     };
+
+    const editorTypeSelection = [
+        {label: 'XML', value: EditorType.XML},
+        {label: 'DataTable', value: EditorType.DATA_GRID},
+    ];
 
     const processEntries = (entries: FileEntry[], parent: TreeNode) => {
         for (const entry of entries) {
@@ -80,33 +85,23 @@ const Editor = () => {
     }, [locationState.directory]);
 
     return (
-        <Page>
-            <Page.Header>
-                <h2>Editor</h2>
-            </Page.Header>
-            <Page.Content>
-                <Grid.Container>
-                    <Grid xs={12}>
-                        <Button type="secondary" ghost onClick={() => navigator('/')}>
-                            Back To Project Selection
-                        </Button>
-                    </Grid>
-                    <Grid xs={showEditType ? 12 : 0}>
-                        <Select value={editorType} onChange={editorTypeChanged}>
-                            <Select.Option value="0">XML</Select.Option>
-                            <Select.Option value="1">DataGrid</Select.Option>
-                        </Select>
-                    </Grid>
-                </Grid.Container>
-                <Spacer h={2} />
-                <Grid.Container id="editor">
-                    <Grid xs={6}>
-                        <Tree value={files} selectionMode="single" onSelect={fileIsSelected} />
-                    </Grid>
-                    <Grid xs={18}>{renderEditor()}</Grid>
-                </Grid.Container>
-            </Page.Content>
-        </Page>
+        <div>
+            <div className="card">
+                <h5>Editor</h5>
+                <Button label="Back To Project Selection" className="p-button-secondary" onClick={() => navigator('/')} />
+            </div>
+            <div className="grid" id="editor">
+                <div className={showEditType ? "col-12" : "hidden"}>
+                    <Dropdown value={editorType} options={editorTypeSelection} onChange={editorTypeChanged} />
+                </div>
+                <div className="col-4">
+                    <Tree value={files} selectionMode="single" onSelect={fileIsSelected} />
+                </div>
+                <div className="col-8">
+                    {renderEditor()}
+                </div>
+            </div>
+        </div>
     );
 };
 
