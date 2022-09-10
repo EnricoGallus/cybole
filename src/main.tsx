@@ -16,17 +16,13 @@ import ProjectOpen from './startScreen/ProjectOpen';
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
 root.render(
     <React.StrictMode>
-        <GeistProvider>
-            <CssBaseline />
-            <HashRouter>
-                <Routes>
-                    <Route path="/editor" element={<Editor />} />
-                    <Route path="/" element={<ProjectSelector children={<ProjectOpen />} />} />
-                    <Route path="/settings" element={<ProjectSelector children={<Setting />} />} />
-                </Routes>
-            </HashRouter>
-        </GeistProvider>
-
+        <HashRouter>
+            <Routes>
+                <Route path="/editor" element={<Editor />} />
+                <Route path="/" element={<ProjectSelector children={<ProjectOpen />} />} />
+                <Route path="/settings" element={<ProjectSelector children={<Setting />} />} />
+            </Routes>
+        </HashRouter>
     </React.StrictMode>
 );
 
