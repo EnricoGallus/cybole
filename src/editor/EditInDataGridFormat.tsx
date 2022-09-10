@@ -1,240 +1,162 @@
-import React, { useEffect, useState } from 'react';
-import { XMLBuilder, XMLParser } from 'fast-xml-parser';
-import BaseTable, { AutoResizer, ColumnShape, unflatten } from 'react-base-table';
-import 'react-base-table/styles.css';
-import { v4 as uuidv4 } from 'uuid';
+import React, {useEffect, useRef, useState} from 'react';
+import { XMLParser } from 'fast-xml-parser';
 
-import EditCell from './EditCell';
-import {readTextFile, writeTextFile} from "@tauri-apps/api/fs";
+import {Column} from "primereact/column";
+import {TreeTable} from "primereact/treetable";
+import {Toast} from "primereact/toast";
+import {ContextMenu} from "primereact/contextmenu";
+import {InputText} from "primereact/inputtext";
+import {Dropdown} from "primereact/dropdown";
 
-function convertNodeToDataRow(node: CybolNode, parent: DataRow | null): DataRow {
-    const index = uuidv4();
+function convertNodeToDataRow(node: CybolNode | null, index: number, parent: DataRow | null): DataRow {
     return {
-        id: `${index}`,
-        parentId: parent != null ? parent.id : null,
-        name: node.name,
-        channel: node.channel,
-        format: node.format,
-        model: node.model,
+        key: parent == null ? index.toString() : parent.key + '-' + index,
+        data: {
+            index: index,
+            name: node ? node.name : 'new Node',
+            channel: node ? node.channel : '',
+            format: node ? node.format : '',
+            model: node ? node.model : '',
+        },
         children: [],
     };
 }
 
-const mapToNode = (row: DataRow): CybolNode => ({
-    name: row.name,
-    channel: row.channel,
-    format: row.format,
-    model: row.model,
-    node: convertDataRowsToNode(row.children),
-});
-
-const convertDataRowsToNode = (rows: DataRow[]): CybolNode[] => rows.map(mapToNode);
+function getNextIndex(nodes: DataRow[]) : number {
+    return nodes.length === 0 ? 0 : Math.max(...nodes.map(o => o.data.index)) + 1
+}
 
 const xmlOptions = { ignoreAttributes: false, attributeNamePrefix: '' };
 
 function convertContentToTableFormat(content: string): DataRow[] {
     const xmlStructure = new XMLParser(xmlOptions).parse(content) as XmlStructure;
     const rows: DataRow[] = [];
-    xmlStructure.node.node.forEach((node: CybolNode) => {
-        const data = convertNodeToDataRow(node, null);
+    for (let i = 0; i < xmlStructure.node.node.length; i++){
+        const node: CybolNode = xmlStructure.node.node[i];
+        const data = convertNodeToDataRow(node, i, null);
         rows.push(data);
         if (node.node !== undefined) {
             if (Array.isArray(node.node)) {
-                node.node.forEach((childNode) => {
-                    rows.push(convertNodeToDataRow(childNode, data));
-                });
-            } else if (node.node !== undefined) {
-                rows.push(convertNodeToDataRow(node.node, data));
+                for (let j = 0; j < node.node.length; j++){
+                    const childNode = node.node[j];
+                    data.children.push(convertNodeToDataRow(childNode, j, data));
+                }
+            } else {
+                data.children.push(convertNodeToDataRow(node.node, 0, data));
             }
         }
-    });
+    }
 
     return rows;
 }
 
-function mapDataRow(
-    data: DataRow[],
-    idToRemove: string | null,
-    addNewAfterId: string | null,
-    addNewChildAfterId: string | null
-) {
-    const newArray: DataRow[] = [];
-
-    function newRow(parent: DataRow | null) {
-        return {
-            id: uuidv4(),
-            parentId: parent != null ? parent.id : null,
-            name: 'new Node',
-            channel: '',
-            format: '',
-            model: '',
-            children: [],
-        };
-    }
-
-    function loop(rows: DataRow[], parent: DataRow | null) {
-        if (idToRemove && rows.some((row) => row.id === idToRemove)) {
-            rows = rows.filter((x) => x.id !== idToRemove);
-        }
-
-        if (addNewAfterId && rows.some((row) => row.id === addNewAfterId)) {
-            const index = rows.findIndex((s) => s.id === addNewAfterId) + 1;
-            rows = [...rows.slice(0, index), newRow(parent), ...rows.slice(index)];
-        }
-
-        Object.entries(rows).forEach((entry) => {
-            const row = { ...entry[1], children: [] };
-            if (parent == null) {
-                newArray.push(row);
-            } else {
-                parent.children.push(row);
-            }
-
-            let { children } = entry[1];
-            if (addNewChildAfterId && entry[1].id === addNewChildAfterId) {
-                children = [...children, newRow(entry[1])];
-            }
-
-            if (children.length) {
-                loop(children, row);
-            }
-        });
-    }
-
-    loop(data, null);
-
-    return newArray;
-}
-
-function saveData(pathToFile: string, data: DataRow[]) {
-    const builder = new XMLBuilder({ ...xmlOptions, format: true, suppressEmptyNode: true });
-    const xmlOutput = builder.build({ node: { node: convertDataRowsToNode(data) } });
-    writeTextFile(pathToFile, xmlOutput);
-}
-
-type RowHandler = {
-    rowData: DataRow;
-};
-
 const channelTypes = ['inline', 'file'];
 
-const rowEventHandlers = {
-    onContextMenu(x: RowHandler) {
-        window.electron.openContextMenu(x.rowData);
-    },
-};
-
 const EditInDataGridFormat = (props: EditorProps) => {
-    const [data, setData] = useState<DataRow[]>(unflatten(convertContentToTableFormat(props.content)));
+    const [data, setData] = useState<DataRow[]>();
+    const [selectedNodeKey, setSelectedNodeKey] = useState(undefined);
+    const toast = useRef(null);
+    const cm = useRef(null);
 
-    useEffect(() => {
-        window.electron.on('delete-node', (event, rowData: DataRow) => {
-            const newData = mapDataRow(data, rowData.id, null, null);
-            updateData(newData);
-        });
+    const findNodeParentByKey = (nodes: DataRow[], key: string) => {
+        let path = key.split('-');
+        let node, parent;
 
-        window.electron.on('add-node', (event, rowData: DataRow) => {
-            const newData = mapDataRow(data, null, rowData.id, null);
-            updateData(newData);
-        });
+        while (path.length) {
+            let list: DataRow[] = node ? node.children : nodes;
+            node = list[parseInt(path[0], 10)];
+            if (path.length - 1 && path.length - 1 > 0) {
+                parent = node;
+            }
 
-        window.electron.on('add-subnode', (event, rowData: DataRow) => {
-            const newData = mapDataRow(data, null, null, rowData.id);
-            updateData(newData);
-        });
-    });
+            path.shift();
+        }
 
-    const expandColumnKey = `name`;
-    const { fileKey } = props;
+        return {node: node, parent: parent };
+    }
 
-    const columns: ColumnShape<DataRow>[] = [
+    const onEditorValueChange = (options, value) => {
+        let newNodes = JSON.parse(JSON.stringify(data));
+        let { node } = findNodeParentByKey(newNodes, options.node.key);
+        node.data[options.field] = value;
+
+        setData(newNodes);
+    }
+
+    const inputTextEditor = (options) => {
+        return (
+            <InputText type="text" value={options.rowData[options.field]}
+                       onChange={(e) => onEditorValueChange(options, e.target.value)} />
+        );
+    }
+
+    const dropDownEditor = (options) => {
+        return (
+            <Dropdown value={options.rowData[options.field]} options={channelTypes} onChange={(e) => onEditorValueChange(options, e.value)}/>
+        )
+    }
+
+    const menu = [
         {
-            key: `name`,
-            dataKey: `name`,
-            title: `name`,
-            width: 150,
-            cellRenderer: ({ cellData, container, rowData }) => (
-                <EditCell
-                    cellData={cellData as string}
-                    container={container}
-                    rowData={rowData}
-                    property="name"
-                    renderType="input"
-                    saveHandler={() => saveData(fileKey, container.getExpandedState().expandedData)}
-                />
-            ),
+            label: 'Add Node',
+            icon: 'pi pi-plus',
+            command: () => {
+                let newNodes = JSON.parse(JSON.stringify(data));
+                let {parent} = findNodeParentByKey(newNodes, selectedNodeKey);
+                if (parent == null) {
+                    const index = newNodes.findIndex((node: DataRow) => node.key === selectedNodeKey)
+                    const newNode = convertNodeToDataRow(null, getNextIndex(newNodes), null);
+                    setData([...newNodes.slice(0, index), newNode, ...newNodes.slice(index)]);
+                } else {
+                    const index = parent.children.findIndex((node: DataRow) => node.key === selectedNodeKey)
+                    const newNode = convertNodeToDataRow(null, getNextIndex(parent.children), parent);
+                    parent.children = [...parent.children.slice(0, index), newNode, ...parent.children.slice(index)];
+                    setData(newNodes);
+                }
+                toast?.current.show({ severity: 'success', summary: 'Addde Node', detail: selectedNodeKey });
+            }
         },
         {
-            key: `channel`,
-            dataKey: `channel`,
-            title: `channel`,
-            width: 150,
-            cellRenderer: ({ cellData, container, rowData }) => (
-                <EditCell
-                    cellData={cellData as string}
-                    container={container}
-                    renderType="select"
-                    selectValues={channelTypes}
-                    saveHandler={() => saveData(fileKey, container.getExpandedState().expandedData)}
-                    rowData={rowData}
-                    property="channel"
-                />
-            ),
+            label: 'Add SubNode',
+            icon: 'pi pi-arrow-down',
+            command: () => {
+                let newNodes = JSON.parse(JSON.stringify(data));
+                let {parent, node} = findNodeParentByKey(newNodes, selectedNodeKey);
+                node.children.push(convertNodeToDataRow(null, getNextIndex(node.children), node))
+                setData(newNodes);
+                toast?.current.show({ severity: 'success', summary: 'Add SubNode', detail: selectedNodeKey });
+            }
         },
         {
-            key: `format`,
-            dataKey: `format`,
-            title: `format`,
-            width: 150,
-            cellRenderer: ({ cellData, container, rowData }) => (
-                <EditCell
-                    cellData={cellData as string}
-                    container={container}
-                    rowData={rowData}
-                    property="format"
-                    renderType="input"
-                    saveHandler={() => saveData(fileKey, container.getExpandedState().expandedData)}
-                />
-            ),
-        },
-        {
-            key: `model`,
-            dataKey: `model`,
-            title: `model`,
-            width: 150,
-            cellRenderer: ({ cellData, container, rowData }) => (
-                <EditCell
-                    cellData={cellData as string}
-                    container={container}
-                    rowData={rowData}
-                    property="model"
-                    renderType="input"
-                    saveHandler={() => saveData(fileKey, container.getExpandedState().expandedData)}
-                />
-            ),
-        },
+            label: 'Delete',
+            icon: 'pi pi-trash',
+            command: () => {
+                let newNodes = JSON.parse(JSON.stringify(data));
+                let {parent} = findNodeParentByKey(newNodes, selectedNodeKey);
+                parent.children = parent.children.filter((child: DataRow) => child.key != selectedNodeKey);
+                setData(newNodes);
+                toast?.current.show({ severity: 'success', summary: 'Delete Node', detail: selectedNodeKey });
+            }
+        }
     ];
 
-    const updateData = (newData: DataRow[]) => {
-        setData(newData);
-        saveData(fileKey, newData);
-    };
+    useEffect(() => {
+        setData(convertContentToTableFormat(props.content))
+    }, []);
 
     return (
         <div className="tableContainer">
-            <AutoResizer>
-                {({ width, height }) => (
-                    <BaseTable
-                        data={data}
-                        width={width}
-                        height={height}
-                        fixed
-                        columns={columns}
-                        rowEventHandlers={rowEventHandlers}
-                        expandColumnKey={expandColumnKey}
-                    />
-                )}
-            </AutoResizer>
+            <Toast ref={toast} />
+
+            <ContextMenu model={menu} ref={cm} onHide={() => setSelectedNodeKey(null)} />
+            <TreeTable value={data}
+                       contextMenuSelectionKey={selectedNodeKey} onContextMenuSelectionChange={event => setSelectedNodeKey(event.value)}
+                       onContextMenu={event => cm.current.show(event.originalEvent)}>
+                <Column field="name" header="Name" editor={inputTextEditor} expander></Column>
+                <Column field="channel" header="Channel" editor={dropDownEditor}></Column>
+                <Column field="format" header="Format" editor={inputTextEditor}></Column>
+                <Column field="model" header="Model" editor={inputTextEditor}></Column>
+            </TreeTable>
         </div>
     );
 };
