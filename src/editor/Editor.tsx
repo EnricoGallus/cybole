@@ -1,11 +1,12 @@
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { Button, Grid, Page, Select, Spacer, Tree } from '@geist-ui/core';
-import { TreeFile } from '@geist-ui/core/dist/tree';
+import { Button, Grid, Page, Select, Spacer } from '@geist-ui/core';
 import {readDir, readTextFile, FileEntry} from '@tauri-apps/api/fs';
 
 import EditInXmlFormat from './EditInXmlFormat';
 import EditInDataGridFormat from './EditInDataGridFormat';
+import TreeNode from "primereact/treenode";
+import {Tree, TreeEventNodeParams} from "primereact/tree";
 
 export enum EditorType {
     XML = '0',
@@ -22,7 +23,7 @@ const Editor = () => {
     const locationState = location.state as LocationStateType;
     const [editorType, setEditorType] = useState<string>('');
     const [showEditType, setShowEditorType] = useState(false);
-    const [files, setFiles] = useState<TreeFile[]>([]);
+    const [files, setFiles] = useState<TreeNode[]>([]);
     const [fileKey, setFileKey] = useState('');
     const [content, setContent] = useState('');
 
@@ -40,25 +41,25 @@ const Editor = () => {
         setEditorType(val as string);
     };
 
-    const fileIsSelected = (item: string) => {
-        readTextFile(item).then((content) => {
+    const fileIsSelected = (item: TreeEventNodeParams) => {
+        readTextFile(item.node.data.path).then((content) => {
             setShowEditorType(true)
             setEditorType(EditorType.XML);
-            setFileKey(item);
+            setFileKey(item.node.data.label);
             setContent(content);
         })
 
     };
 
-    const processEntries = (entries: FileEntry[], parent: TreeFile) => {
+    const processEntries = (entries: FileEntry[], parent: TreeNode) => {
         for (const entry of entries) {
             if (entry.children) {
-                let directory: TreeFile = {name: entry.name as string, type: 'directory', files: []};
-                parent.files?.push(directory)
+                let directory: TreeNode = {label: entry.name, children: []};
+                parent.children?.push(directory)
                 processEntries(entry.children, directory)
             } else {
-                let file: TreeFile = {name: entry.name as string, type: 'file'};
-                parent.files?.push(file)
+                let file: TreeNode = {label: entry.name, selectable: true, data: { path: entry.path }};
+                parent.children?.push(file)
             }
         }
     }
@@ -66,10 +67,12 @@ const Editor = () => {
     useEffect(() => {
         readDir(locationState.directory, {recursive: true})
             .then((files) => {
-                let rootNode: TreeFile = {
-                    name: locationState.directory,
-                    type: 'directory',
-                    files: []
+                let rootNode: TreeNode = {
+                    key: 1,
+                    label: locationState.directory,
+                    selectable: false,
+                    leaf: true,
+                    children: [],
                 }
                 processEntries(files, rootNode)
                 setFiles([rootNode]);
@@ -98,7 +101,7 @@ const Editor = () => {
                 <Spacer h={2} />
                 <Grid.Container id="editor">
                     <Grid xs={6}>
-                        <Tree value={files} onClick={fileIsSelected} />
+                        <Tree value={files} selectionMode="single" onSelect={fileIsSelected} />
                     </Grid>
                     <Grid xs={18}>{renderEditor()}</Grid>
                 </Grid.Container>
