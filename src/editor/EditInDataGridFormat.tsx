@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import { XMLParser } from 'fast-xml-parser';
 
-import {Column} from "primereact/column";
+import {Column, ColumnEditorOptions} from "primereact/column";
 import {TreeTable} from "primereact/treetable";
 import {Toast} from "primereact/toast";
 import {ContextMenu} from "primereact/contextmenu";
@@ -54,9 +54,9 @@ const channelTypes = ['inline', 'file'];
 
 const EditInDataGridFormat = (props: EditorProps) => {
     const [data, setData] = useState<DataRow[]>();
-    const [selectedNodeKey, setSelectedNodeKey] = useState(undefined);
-    const toast = useRef(null);
-    const cm = useRef(null);
+    const [selectedNodeKey, setSelectedNodeKey] = useState<string>('');
+    const toast = useRef<Toast>(null);
+    const cm = useRef<ContextMenu>(null);
 
     const findNodeParentByKey = (nodes: DataRow[], key: string) => {
         let path = key.split('-');
@@ -75,22 +75,23 @@ const EditInDataGridFormat = (props: EditorProps) => {
         return {node: node, parent: parent };
     }
 
-    const onEditorValueChange = (options, value) => {
+    const onEditorValueChange = (options: ColumnEditorOptions, value: any) => {
         let newNodes = JSON.parse(JSON.stringify(data));
         let { node } = findNodeParentByKey(newNodes, options.node.key);
+        // @ts-ignore
         node.data[options.field] = value;
 
         setData(newNodes);
     }
 
-    const inputTextEditor = (options) => {
+    const inputTextEditor = (options: ColumnEditorOptions) => {
         return (
             <InputText type="text" value={options.rowData[options.field]}
                        onChange={(e) => onEditorValueChange(options, e.target.value)} />
         );
     }
 
-    const dropDownEditor = (options) => {
+    const dropDownEditor = (options: ColumnEditorOptions) => {
         return (
             <Dropdown value={options.rowData[options.field]} options={channelTypes} onChange={(e) => onEditorValueChange(options, e.value)}/>
         )
@@ -103,7 +104,7 @@ const EditInDataGridFormat = (props: EditorProps) => {
             command: () => {
                 let newNodes = JSON.parse(JSON.stringify(data));
                 let {parent} = findNodeParentByKey(newNodes, selectedNodeKey);
-                if (parent == null) {
+                if (parent == undefined) {
                     const index = newNodes.findIndex((node: DataRow) => node.key === selectedNodeKey)
                     const newNode = convertNodeToDataRow(null, getNextIndex(newNodes), null);
                     setData([...newNodes.slice(0, index), newNode, ...newNodes.slice(index)]);
@@ -113,7 +114,7 @@ const EditInDataGridFormat = (props: EditorProps) => {
                     parent.children = [...parent.children.slice(0, index), newNode, ...parent.children.slice(index)];
                     setData(newNodes);
                 }
-                toast?.current.show({ severity: 'success', summary: 'Addde Node', detail: selectedNodeKey });
+                toast.current?.show({ severity: 'success', summary: 'Addde Node', detail: selectedNodeKey });
             }
         },
         {
@@ -121,10 +122,14 @@ const EditInDataGridFormat = (props: EditorProps) => {
             icon: 'pi pi-arrow-down',
             command: () => {
                 let newNodes = JSON.parse(JSON.stringify(data));
-                let {parent, node} = findNodeParentByKey(newNodes, selectedNodeKey);
-                node.children.push(convertNodeToDataRow(null, getNextIndex(node.children), node))
-                setData(newNodes);
-                toast?.current.show({ severity: 'success', summary: 'Add SubNode', detail: selectedNodeKey });
+                let {node} = findNodeParentByKey(newNodes, selectedNodeKey);
+                if (node === undefined) {
+                    toast?.current?.show({ severity: 'error', summary: 'Add SubNode failed', detail: selectedNodeKey });
+                } else {
+                    node.children.push(convertNodeToDataRow(null, getNextIndex(node.children), node))
+                    setData(newNodes);
+                    toast.current?.show({severity: 'success', summary: 'Add SubNode', detail: selectedNodeKey});
+                }
             }
         },
         {
@@ -133,9 +138,13 @@ const EditInDataGridFormat = (props: EditorProps) => {
             command: () => {
                 let newNodes = JSON.parse(JSON.stringify(data));
                 let {parent} = findNodeParentByKey(newNodes, selectedNodeKey);
-                parent.children = parent.children.filter((child: DataRow) => child.key != selectedNodeKey);
-                setData(newNodes);
-                toast?.current.show({ severity: 'success', summary: 'Delete Node', detail: selectedNodeKey });
+                if (parent === undefined) {
+                    toast?.current?.show({ severity: 'error', summary: 'Delete Node failed', detail: selectedNodeKey });
+                } else {
+                    parent.children = parent.children.filter((child: DataRow) => child.key != selectedNodeKey);
+                    setData(newNodes);
+                    toast?.current?.show({ severity: 'success', summary: 'Delete Node', detail: selectedNodeKey });
+                }
             }
         }
     ];
@@ -148,10 +157,10 @@ const EditInDataGridFormat = (props: EditorProps) => {
         <div className="tableContainer">
             <Toast ref={toast} />
 
-            <ContextMenu model={menu} ref={cm} onHide={() => setSelectedNodeKey(null)} />
+            <ContextMenu model={menu} ref={cm} onHide={() => setSelectedNodeKey('')} />
             <TreeTable value={data}
-                       contextMenuSelectionKey={selectedNodeKey} onContextMenuSelectionChange={event => setSelectedNodeKey(event.value)}
-                       onContextMenu={event => cm.current.show(event.originalEvent)}>
+                       contextMenuSelectionKey={selectedNodeKey} onContextMenuSelectionChange={event => setSelectedNodeKey(event.value.toString)}
+                       onContextMenu={event => cm.current?.show(event.originalEvent)}>
                 <Column field="name" header="Name" editor={inputTextEditor} expander></Column>
                 <Column field="channel" header="Channel" editor={dropDownEditor}></Column>
                 <Column field="format" header="Format" editor={inputTextEditor}></Column>

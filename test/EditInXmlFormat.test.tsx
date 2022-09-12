@@ -1,12 +1,12 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import EditInDataGridFormat from './EditInDataGridFormat';
+import EditInXmlFormat from '../src/editor/EditInXmlFormat';
 
-describe('EditInDataGridFormat', () => {
+describe('EditInXmlFormat', () => {
     test('renders component', () => {
         const { container } = render(
-            <EditInDataGridFormat
+            <EditInXmlFormat
                 fileKey="test.xml"
                 content='<node><node name="test" format="" /><node name="test2" /></node>'
             />,
