@@ -1,11 +1,11 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import ProjectList from './ProjectList';
+import Setting from '../src/startScreen/Setting';
 
-describe('ProjectList', () => {
+describe('Setting', () => {
     test('renders component', () => {
-        const { container } = render(<ProjectList />, {
+        const { container } = render(<Setting />, {
             wrapper: MemoryRouter,
         });
 

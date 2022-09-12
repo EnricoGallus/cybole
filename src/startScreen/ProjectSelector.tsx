@@ -1,6 +1,7 @@
 import React, {ReactNode} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Menu} from "primereact/menu";
+import {MenuItemCommandParams} from "primereact/menuitem";
 
 type PropsType = {
     children: ReactNode;
@@ -20,14 +21,14 @@ const ProjectSelector = (props: PropsType) => {
                 {
                     label: 'Projects',
                     icon: 'pi pi-align-justify',
-                    command: (e) => {
+                    command: () => {
                         handleMenu('/')
                     }
                 },
                 {
                     label: 'Settings',
                     icon: 'pi pi-cog',
-                    command: (e) => {
+                    command: () => {
                         handleMenu('/settings')
                     }
                 }

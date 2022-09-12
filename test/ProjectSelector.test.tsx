@@ -1,11 +1,11 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import Setting from './Setting';
+import ProjectSelector from '../src/startScreen/ProjectSelector';
 
-describe('Setting', () => {
+describe('ProjectSelector', () => {
     test('renders component', () => {
-        const { container } = render(<Setting />, {
+        const { container } = render(<ProjectSelector children={<div data-testid="project-open" />} />, {
             wrapper: MemoryRouter,
         });
 
