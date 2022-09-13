@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import { XMLParser } from 'fast-xml-parser';
+import {XMLBuilder, XMLParser} from 'fast-xml-parser';
 
 import {Column, ColumnEditorOptions} from "primereact/column";
 import {TreeTable} from "primereact/treetable";
@@ -7,6 +7,7 @@ import {Toast} from "primereact/toast";
 import {ContextMenu} from "primereact/contextmenu";
 import {InputText} from "primereact/inputtext";
 import {Dropdown} from "primereact/dropdown";
+import {writeTextFile} from "@tauri-apps/api/fs";
 
 function convertNodeToDataRow(node: CybolNode | null, index: number, parent: DataRow | null): DataRow {
     return {
@@ -50,13 +51,31 @@ function convertContentToTableFormat(content: string): DataRow[] {
     return rows;
 }
 
+const mapToNode = (row: DataRow): CybolNode => ({
+    name: row.data.name,
+    channel: row.data.channel,
+    format: row.data.format,
+    model: row.data.model,
+    node: convertDataRowsToNode(row.children),
+});
+
+const convertDataRowsToNode = (rows: DataRow[]): CybolNode[] => rows.map(mapToNode);
+
 const channelTypes = ['inline', 'file'];
 
 const EditInDataGridFormat = (props: EditorProps) => {
+    const { fileKey, stateChanger } = props;
     const [data, setData] = useState<DataRow[]>();
     const [selectedNodeKey, setSelectedNodeKey] = useState<string>('');
     const toast = useRef<Toast>(null);
     const cm = useRef<ContextMenu>(null);
+
+    const saveData = (pathToFile: string, data: DataRow[]) => {
+        const builder = new XMLBuilder({ ...xmlOptions, format: true, suppressEmptyNode: false });
+        const xmlOutput = builder.build({ node: { node: convertDataRowsToNode(data) } });
+        writeTextFile(pathToFile, xmlOutput);
+        stateChanger(xmlOutput);
+    }
 
     const findNodeParentByKey = (nodes: DataRow[], key: string) => {
         let path = key.split('-');
@@ -82,6 +101,7 @@ const EditInDataGridFormat = (props: EditorProps) => {
         node.data[options.field] = value;
 
         setData(newNodes);
+        updateData(newNodes);
     }
 
     const inputTextEditor = (options: ColumnEditorOptions) => {
@@ -96,6 +116,11 @@ const EditInDataGridFormat = (props: EditorProps) => {
             <Dropdown value={options.rowData[options.field]} options={channelTypes} onChange={(e) => onEditorValueChange(options, e.value)}/>
         )
     }
+
+    const updateData = (newData: DataRow[]) => {
+        setData(newData);
+        saveData(fileKey, newData);
+    };
 
     const menu = [
         {
@@ -114,6 +139,7 @@ const EditInDataGridFormat = (props: EditorProps) => {
                     parent.children = [...parent.children.slice(0, index), newNode, ...parent.children.slice(index)];
                     setData(newNodes);
                 }
+                updateData(newNodes);
                 toast.current?.show({ severity: 'success', summary: 'Addde Node', detail: selectedNodeKey });
             }
         },
@@ -128,6 +154,7 @@ const EditInDataGridFormat = (props: EditorProps) => {
                 } else {
                     node.children.push(convertNodeToDataRow(null, getNextIndex(node.children), node))
                     setData(newNodes);
+                    updateData(newNodes);
                     toast.current?.show({severity: 'success', summary: 'Add SubNode', detail: selectedNodeKey});
                 }
             }
@@ -143,6 +170,7 @@ const EditInDataGridFormat = (props: EditorProps) => {
                 } else {
                     parent.children = parent.children.filter((child: DataRow) => child.key != selectedNodeKey);
                     setData(newNodes);
+                    updateData(newNodes);
                     toast?.current?.show({ severity: 'success', summary: 'Delete Node', detail: selectedNodeKey });
                 }
             }
