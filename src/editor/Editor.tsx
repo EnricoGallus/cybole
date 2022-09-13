@@ -8,6 +8,7 @@ import TreeNode from "primereact/treenode";
 import {Tree, TreeEventNodeParams} from "primereact/tree";
 import {Dropdown, DropdownChangeParams} from "primereact/dropdown";
 import {Button} from "primereact/button";
+import React from 'react';
 
 export enum EditorType {
     XML = '0',
@@ -23,18 +24,22 @@ const Editor = () => {
     const navigator = useNavigate();
     const locationState = location.state as LocationStateType;
     const [editorType, setEditorType] = useState<string>('');
-    const [showEditType, setShowEditorType] = useState(false);
+    const [fileSelected, setFileSelected] = useState(false);
     const [files, setFiles] = useState<TreeNode[]>([]);
     const [fileKey, setFileKey] = useState('');
     const [content, setContent] = useState('');
 
     const renderEditor = () => {
         if (editorType === EditorType.XML) {
-            return <EditInXmlFormat key={fileKey} fileKey={fileKey} content={content} />;
+            return (<React.Fragment><div className="col-12">
+                <Dropdown value={editorType} options={editorTypeSelection} onChange={editorTypeChanged} />
+            </div><EditInXmlFormat key={fileKey} fileKey={fileKey} content={content} stateChanger={setContent} /></React.Fragment>);
         }
 
         if (editorType === EditorType.DATA_GRID) {
-            return <EditInDataGridFormat key={fileKey} fileKey={fileKey} content={content} />;
+            return (<React.Fragment><div className="col-12">
+                <Dropdown value={editorType} options={editorTypeSelection} onChange={editorTypeChanged} />
+            </div><EditInDataGridFormat key={fileKey} fileKey={fileKey} content={content} stateChanger={setContent} /></React.Fragment>);
         }
     };
 
@@ -44,9 +49,9 @@ const Editor = () => {
 
     const fileIsSelected = (item: TreeEventNodeParams) => {
         readTextFile(item.node.data.path).then((content) => {
-            setShowEditorType(true)
+            setFileSelected(true)
             setEditorType(EditorType.DATA_GRID);
-            setFileKey(item.node.data.label);
+            setFileKey(item.node.data.path);
             setContent(content);
         })
     };
@@ -59,7 +64,7 @@ const Editor = () => {
     const processEntries = (entries: FileEntry[], parent: TreeNode) => {
         for (const entry of entries) {
             if (entry.children) {
-                let directory: TreeNode = {label: entry.name, children: []};
+                let directory: TreeNode = {label: entry.name, selectable: false, children: []};
                 parent.children?.push(directory)
                 processEntries(entry.children, directory)
             } else {
@@ -91,14 +96,11 @@ const Editor = () => {
                 <Button label="Back To Project Selection" className="p-button-secondary" onClick={() => navigator('/')} />
             </div>
             <div className="grid" id="editor">
-                <div className={showEditType ? "col-12" : "hidden"}>
-                    <Dropdown value={editorType} options={editorTypeSelection} onChange={editorTypeChanged} />
-                </div>
                 <div className="col-4">
                     <Tree value={files} selectionMode="single" onSelect={fileIsSelected} />
                 </div>
                 <div className="col-8">
-                    {renderEditor()}
+                    {fileSelected && renderEditor()}
                 </div>
             </div>
         </div>
