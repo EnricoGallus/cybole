@@ -1,0 +1,83 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProjectSelector renders component 1`] = `
+<div>
+  <div
+    class="grid"
+  >
+    <div
+      class="card col-12"
+    >
+      <h5>
+        Projects
+      </h5>
+    </div>
+    <div
+      class="col-3 pl-5"
+    >
+      <div
+        class="p-menu p-component"
+      >
+        <ul
+          class="p-menu-list p-reset"
+          role="menu"
+        >
+          <li
+            class="p-submenu-header"
+            role="presentation"
+          >
+            Menu
+          </li>
+          <li
+            class="p-menuitem"
+            role="none"
+          >
+            <a
+              class="p-menuitem-link"
+              href="#"
+              role="menuitem"
+              tabindex="0"
+            >
+              <span
+                class="p-menuitem-icon pi pi-align-justify"
+              />
+              <span
+                class="p-menuitem-text"
+              >
+                Projects
+              </span>
+            </a>
+          </li>
+          <li
+            class="p-menuitem"
+            role="none"
+          >
+            <a
+              class="p-menuitem-link"
+              href="#"
+              role="menuitem"
+              tabindex="0"
+            >
+              <span
+                class="p-menuitem-icon pi pi-cog"
+              />
+              <span
+                class="p-menuitem-text"
+              >
+                Settings
+              </span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div
+      class="col-9"
+    >
+      <div
+        data-testid="project-open"
+      />
+    </div>
+  </div>
+</div>
+`;

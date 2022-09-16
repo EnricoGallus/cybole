@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`ProjectList renders component 1`] = `
+<div>
+  <div>
+    <div
+      class="card"
+    >
+      <h5>
+        Projects
+      </h5>
+    </div>
+    <div
+      class="grid"
+    >
+      <div
+        class="col-12"
+      >
+        <a
+          class="btn btn-primary"
+          href="/projectNew"
+        >
+          New Project
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+`;

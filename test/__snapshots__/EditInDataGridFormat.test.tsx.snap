@@ -1,0 +1,184 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`EditInDataGridFormat renders component 1`] = `
+<div>
+  <div
+    class="tableContainer"
+  >
+    <div
+      class="p-toast p-component p-toast-top-right"
+    >
+      <div />
+    </div>
+    <div
+      class="p-treetable p-component"
+      data-scrollselectors=".p-treetable-scrollable-body"
+    >
+      <div
+        class="p-treetable-wrapper"
+      >
+        <table>
+          <thead
+            class="p-treetable-thead"
+          >
+            <tr>
+              <th
+                class=""
+              >
+                <span
+                  class="p-column-title"
+                >
+                  Name
+                </span>
+              </th>
+              <th
+                class=""
+              >
+                <span
+                  class="p-column-title"
+                >
+                  Channel
+                </span>
+              </th>
+              <th
+                class=""
+              >
+                <span
+                  class="p-column-title"
+                >
+                  Format
+                </span>
+              </th>
+              <th
+                class=""
+              >
+                <span
+                  class="p-column-title"
+                >
+                  Model
+                </span>
+              </th>
+            </tr>
+          </thead>
+          <tbody
+            class="p-treetable-tbody"
+          >
+            <tr
+              class=""
+              tabindex="0"
+            >
+              <td
+                class="p-editable-column"
+              >
+                <button
+                  class="p-treetable-toggler p-link p-unselectable-text"
+                  style="margin-left: 0px; visibility: hidden;"
+                  tabindex="-1"
+                  type="button"
+                >
+                  <i
+                    class="p-treetable-toggler-icon pi pi-fw pi-chevron-right"
+                  />
+                </button>
+                <a
+                  class="p-cell-editor-key-helper p-hidden-accessible"
+                  tabindex="0"
+                >
+                  <span />
+                </a>
+                test
+              </td>
+              <td
+                class="p-editable-column"
+              >
+                <a
+                  class="p-cell-editor-key-helper p-hidden-accessible"
+                  tabindex="0"
+                >
+                  <span />
+                </a>
+              </td>
+              <td
+                class="p-editable-column"
+              >
+                <a
+                  class="p-cell-editor-key-helper p-hidden-accessible"
+                  tabindex="0"
+                >
+                  <span />
+                </a>
+              </td>
+              <td
+                class="p-editable-column"
+              >
+                <a
+                  class="p-cell-editor-key-helper p-hidden-accessible"
+                  tabindex="0"
+                >
+                  <span />
+                </a>
+              </td>
+            </tr>
+            <tr
+              class=""
+              tabindex="0"
+            >
+              <td
+                class="p-editable-column"
+              >
+                <button
+                  class="p-treetable-toggler p-link p-unselectable-text"
+                  style="margin-left: 0px; visibility: hidden;"
+                  tabindex="-1"
+                  type="button"
+                >
+                  <i
+                    class="p-treetable-toggler-icon pi pi-fw pi-chevron-right"
+                  />
+                </button>
+                <a
+                  class="p-cell-editor-key-helper p-hidden-accessible"
+                  tabindex="0"
+                >
+                  <span />
+                </a>
+                test2
+              </td>
+              <td
+                class="p-editable-column"
+              >
+                <a
+                  class="p-cell-editor-key-helper p-hidden-accessible"
+                  tabindex="0"
+                >
+                  <span />
+                </a>
+              </td>
+              <td
+                class="p-editable-column"
+              >
+                <a
+                  class="p-cell-editor-key-helper p-hidden-accessible"
+                  tabindex="0"
+                >
+                  <span />
+                </a>
+              </td>
+              <td
+                class="p-editable-column"
+              >
+                <a
+                  class="p-cell-editor-key-helper p-hidden-accessible"
+                  tabindex="0"
+                >
+                  <span />
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+`;
