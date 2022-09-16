@@ -1,11 +1,11 @@
 import { Builder, Util, XmlEditor } from 'react-xml-editor';
-import { createRef, useState } from 'react';
+import {createRef, useEffect, useState} from 'react';
 import { DocSpec, Xml } from 'react-xml-editor/lib/types';
 import 'react-xml-editor/css/xonomy.css';
-import React from 'react';
+import {writeTextFile} from "@tauri-apps/api/fs";
 
 const EditInXmlFormat = (props: EditorProps) => {
-    const { content, fileKey } = props;
+    const { content, fileKey, stateChanger } = props;
     const [xmlContent] = useState(content);
     const [editorKey] = useState(fileKey);
     const xmlEditorRef = createRef<XmlEditor>();
@@ -86,7 +86,8 @@ const EditInXmlFormat = (props: EditorProps) => {
     const saveChanges = () => {
         const xml = xmlEditorRef.current?.getXml();
         const fileContent = new Builder({}).buildObject(xml as Xml);
-        window.electron.writeFile(fileKey, fileContent);
+        writeTextFile(fileKey, fileContent);
+        stateChanger(fileContent);
     };
 
     return (

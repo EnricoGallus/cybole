@@ -1,4 +1,5 @@
 type EditorProps = {
-    content: string;
     fileKey: string;
+    content: string;
+    stateChanger: Function;
 };

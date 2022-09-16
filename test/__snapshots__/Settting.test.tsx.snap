@@ -1,0 +1,29 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Setting renders component 1`] = `
+<div>
+  <div>
+    <div
+      class="card"
+    >
+      <h5>
+        Settings
+      </h5>
+      <a
+        href="/"
+      >
+        <button
+          aria-label="Back to Project Selection"
+          class="p-button p-component p-button-secondary"
+        >
+          <span
+            class="p-button-label p-c"
+          >
+            Back to Project Selection
+          </span>
+        </button>
+      </a>
+    </div>
+  </div>
+</div>
+`;
