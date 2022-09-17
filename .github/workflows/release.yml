@@ -1,9 +1,9 @@
 name: 'Release'
 
 on:
-  push:
-    tags:
-      - 'v*'
+  pull_request:
+    branches:
+      - master
 
 jobs:
 
@@ -23,6 +23,7 @@ jobs:
           prerelease: false
 
   build-tauri:
+    needs: create-release
     strategy:
       fail-fast: false
       matrix:
