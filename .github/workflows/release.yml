@@ -62,7 +62,6 @@ jobs:
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ./src-tauri/target/release/bundle/deb/cybole_*.deb
-          asset_name: cybole.deb
           asset_content_type: application/octet-stream
       - name: Upload MacOS Artifact
         if: matrix.platform == 'macos-latest'
@@ -73,7 +72,6 @@ jobs:
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ./src-tauri/target/release/bundle/dmg/cybole_*.dmg
-          asset_name: cybole.dmg
           asset_content_type: application/octet-stream
       - name: Upload Windows Artifact
         if: matrix.platform == 'windows-latest'
@@ -84,5 +82,4 @@ jobs:
         with:
           upload_url: ${{ needs.create-release.outputs.upload_url }}
           asset_path: ./src-tauri/target/release/bundle/msi/*.msi
-          asset_name: cybole.msi
           asset_content_type: application/octet-stream
