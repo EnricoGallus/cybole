@@ -1,9 +1,14 @@
 name: 'Release'
 
 on:
-  push:
-    branches:
-      - master
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version'
+        required: true
+      name:
+        description: 'Name'
+        required: true
 
 jobs:
 
@@ -18,8 +23,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tag_name: ${{ github.ref }}
-          release_name: ${{ github.ref }}
+          tag_name: ${{ github.event.inputs.version }}
+          release_name: ${{ github.event.inputs.name }}
           draft: false
           prerelease: false
 
