@@ -12,8 +12,24 @@ import Editor from './editor/Editor';
 import ProjectSelector from './startScreen/ProjectSelector';
 import Setting from './startScreen/Setting';
 import ProjectOpen from './startScreen/ProjectOpen';
+import {SettingsManager} from "tauri-settings";
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
+const settingsManager = new SettingsManager<SettingSchema>(
+    { pathToCybop: '', projects: []},
+    { // options
+        fileName: 'cybole-settings',
+    }
+)
+// checks whether the settings file exists and created it if not
+// loads the settings if it exists
+settingsManager.initialize().then(() => {
+    // any key other than 'theme' and 'startFullscreen' will be invalid.
+    // theme key will only accept 'dark' or 'light' as a value due to the generic.
+    settingsManager.setCache('pathToCybop', '');
+});
+
 root.render(
     <React.StrictMode>
         <HashRouter>

@@ -37,15 +37,19 @@ const ProjectSelector = (props: PropsType) => {
     ];
 
     return (
-        <div className="grid">
-            <div className="card col-12">
-                <h5>Projects</h5>
+        <div className="container">
+            <div className="grid">
+                <div className="card col-12">
+                    <h5>Projects</h5>
+                </div>
             </div>
-            <div className="col-3 pl-5">
-                <Menu model={menuItems}/>
-            </div>
-            <div className="col-9">
-                {children}
+            <div className="grid">
+                <div className="col-3">
+                    <Menu model={menuItems}/>
+                </div>
+                <div className="col-9">
+                    {children}
+                </div>
             </div>
         </div>
     );
