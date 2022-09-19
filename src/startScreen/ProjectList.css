@@ -1,0 +1,21 @@
+.project {
+    display: flex;
+    align-items: center;
+    padding: 1rem;
+    width: 100%;
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.project:hover {
+    color: darkslateblue;
+}
+
+.project .project-detail {
+    flex: 1 1 0;
+}
+
+.project .project-action {
+    display: flex;
+    flex-direction: column;
+}

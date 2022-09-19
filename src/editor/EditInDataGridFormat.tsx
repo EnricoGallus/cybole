@@ -66,7 +66,7 @@ const channelTypes = ['inline', 'file'];
 const EditInDataGridFormat = (props: EditorProps) => {
     const { fileKey, stateChanger } = props;
     const [data, setData] = useState<DataRow[]>();
-    const [selectedNodeKey, setSelectedNodeKey] = useState<string>('');
+    const [selectedNodeKey, setSelectedNodeKey] = useState(null);
     const toast = useRef<Toast>(null);
     const cm = useRef<ContextMenu>(null);
 
@@ -77,13 +77,19 @@ const EditInDataGridFormat = (props: EditorProps) => {
         stateChanger(xmlOutput);
     }
 
-    const findNodeParentByKey = (nodes: DataRow[], key: string) => {
+    const findNodeParentByKey = (nodes: DataRow[], key: string | null) => {
+        if (key == undefined) {
+            throw new DOMException();
+        }
+
         let path = key.split('-');
         let node, parent;
+        let currentPath = '';
 
         while (path.length) {
             let list: DataRow[] = node ? node.children : nodes;
-            node = list[parseInt(path[0], 10)];
+            currentPath = node ? currentPath + '-' + path[0] : path[0];
+            node = list.find((node: DataRow) => node.key === currentPath);
             if (path.length - 1 && path.length - 1 > 0) {
                 parent = node;
             }
@@ -99,8 +105,6 @@ const EditInDataGridFormat = (props: EditorProps) => {
         let { node } = findNodeParentByKey(newNodes, options.node.key);
         // @ts-ignore
         node.data[options.field] = value;
-
-        setData(newNodes);
         updateData(newNodes);
     }
 
@@ -130,14 +134,13 @@ const EditInDataGridFormat = (props: EditorProps) => {
                 let newNodes = JSON.parse(JSON.stringify(data));
                 let {parent} = findNodeParentByKey(newNodes, selectedNodeKey);
                 if (parent == undefined) {
-                    const index = newNodes.findIndex((node: DataRow) => node.key === selectedNodeKey)
+                    const index = newNodes.findIndex((node: DataRow) => node.key === selectedNodeKey) + 1;
                     const newNode = convertNodeToDataRow(null, getNextIndex(newNodes), null);
-                    setData([...newNodes.slice(0, index), newNode, ...newNodes.slice(index)]);
+                    newNodes = [...newNodes.slice(0, index), newNode, ...newNodes.slice(index)];
                 } else {
-                    const index = parent.children.findIndex((node: DataRow) => node.key === selectedNodeKey)
+                    const index = parent.children.findIndex((node: DataRow) => node.key === selectedNodeKey) + 1;
                     const newNode = convertNodeToDataRow(null, getNextIndex(parent.children), parent);
                     parent.children = [...parent.children.slice(0, index), newNode, ...parent.children.slice(index)];
-                    setData(newNodes);
                 }
                 updateData(newNodes);
                 toast.current?.show({ severity: 'success', summary: 'Addde Node', detail: selectedNodeKey });
@@ -153,7 +156,6 @@ const EditInDataGridFormat = (props: EditorProps) => {
                     toast?.current?.show({ severity: 'error', summary: 'Add SubNode failed', detail: selectedNodeKey });
                 } else {
                     node.children.push(convertNodeToDataRow(null, getNextIndex(node.children), node))
-                    setData(newNodes);
                     updateData(newNodes);
                     toast.current?.show({severity: 'success', summary: 'Add SubNode', detail: selectedNodeKey});
                 }
@@ -166,13 +168,13 @@ const EditInDataGridFormat = (props: EditorProps) => {
                 let newNodes = JSON.parse(JSON.stringify(data));
                 let {parent} = findNodeParentByKey(newNodes, selectedNodeKey);
                 if (parent === undefined) {
-                    toast?.current?.show({ severity: 'error', summary: 'Delete Node failed', detail: selectedNodeKey });
+                    newNodes = newNodes.filter((node: DataRow) => node.key != selectedNodeKey);
                 } else {
                     parent.children = parent.children.filter((child: DataRow) => child.key != selectedNodeKey);
-                    setData(newNodes);
-                    updateData(newNodes);
-                    toast?.current?.show({ severity: 'success', summary: 'Delete Node', detail: selectedNodeKey });
                 }
+
+                updateData(newNodes);
+                toast?.current?.show({ severity: 'success', summary: 'Delete Node', detail: selectedNodeKey });
             }
         }
     ];
@@ -185,9 +187,11 @@ const EditInDataGridFormat = (props: EditorProps) => {
         <div className="tableContainer">
             <Toast ref={toast} />
 
-            <ContextMenu model={menu} ref={cm} onHide={() => setSelectedNodeKey('')} />
+            <ContextMenu model={menu} ref={cm} onHide={() => setSelectedNodeKey(null)} />
+
             <TreeTable value={data}
-                       contextMenuSelectionKey={selectedNodeKey} onContextMenuSelectionChange={event => setSelectedNodeKey(event.value.toString)}
+                // @ts-ignore
+                       contextMenuSelectionKey={selectedNodeKey} onContextMenuSelectionChange={event => setSelectedNodeKey(event.value)}
                        onContextMenu={event => cm.current?.show(event.originalEvent)}>
                 <Column field="name" header="Name" editor={inputTextEditor} expander></Column>
                 <Column field="channel" header="Channel" editor={dropDownEditor}></Column>

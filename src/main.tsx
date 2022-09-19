@@ -9,18 +9,19 @@ import 'primereact/resources/primereact.min.css'
 import 'primeflex/primeflex.css'
 
 import Editor from './editor/Editor';
-import ProjectSelector from './startScreen/ProjectSelector';
+import StartScreen from './startScreen/StartScreen';
 import Setting from './startScreen/Setting';
-import ProjectOpen from './startScreen/ProjectOpen';
+import ProjectScreen from "./startScreen/ProjectScreen";
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+
 root.render(
     <React.StrictMode>
         <HashRouter>
             <Routes>
                 <Route path="/editor" element={<Editor />} />
-                <Route path="/" element={<ProjectSelector children={<ProjectOpen />} />} />
-                <Route path="/settings" element={<ProjectSelector children={<Setting />} />} />
+                <Route path="/" element={<StartScreen children={<ProjectScreen />} />} />
+                <Route path="/settings" element={<StartScreen children={<Setting />} />} />
             </Routes>
         </HashRouter>
     </React.StrictMode>
