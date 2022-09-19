@@ -3,7 +3,7 @@
   "build": {
     "beforeBuildCommand": "yarn build",
     "beforeDevCommand": "yarn dev --debug",
-    "devPath": "http://localhost:3000",
+    "devPath": "http://localhost:5173",
     "distDir": "../dist"
   },
   "package": {
@@ -55,11 +55,13 @@
     },
     "windows": [
       {
-        "fullscreen": true,
-        "height": 600,
+        "fullscreen": false,
+        "height": 768,
+        "minHeight": 600,
         "resizable": true,
         "title": "cybole",
-        "width": 800
+        "width": 1024,
+        "minWidth": 800
       }
     ]
   }
