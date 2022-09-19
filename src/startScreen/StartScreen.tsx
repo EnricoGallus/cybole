@@ -1,13 +1,12 @@
 import React, {ReactNode} from 'react';
 import {useNavigate} from 'react-router-dom';
 import {Menu} from "primereact/menu";
-import {MenuItemCommandParams} from "primereact/menuitem";
 
 type PropsType = {
     children: ReactNode;
 };
 
-const ProjectSelector = (props: PropsType) => {
+const StartScreen = (props: PropsType) => {
     const navigation = useNavigate();
     const {children} = props;
     const handleMenu = (route: string) => {
@@ -55,4 +54,4 @@ const ProjectSelector = (props: PropsType) => {
     );
 };
 
-export default ProjectSelector;
+export default StartScreen;

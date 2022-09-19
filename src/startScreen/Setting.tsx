@@ -1,15 +1,14 @@
 import React, {useEffect, useState} from 'react';
 import {Button} from "primereact/button";
 import {InputText} from "primereact/inputtext";
-import {get, set} from "tauri-settings";
-import {sendNotification} from "@tauri-apps/api/notification";
 import {open} from "@tauri-apps/api/dialog";
+import persister from "../utils/persister";
 
 const Setting = () => {
     const [pathToCybop, setPathToCybop] = useState('');
 
     useEffect(() => {
-        get<SettingSchema>('pathToCybop').then(value => setPathToCybop(value as string));
+        persister.get().get('pathToCybop').then(value => setPathToCybop(value as string));
     }, [])
 
     const selectPathToCybop = async () => {
@@ -24,9 +23,7 @@ const Setting = () => {
     };
 
     const saveSettings = () => {
-        set<SettingSchema>('pathToCybop', pathToCybop)
-            .then(() => sendNotification('Settings successfully saved!'));
-
+        persister.get().set('pathToCybop', pathToCybop);
     }
 
     return (
