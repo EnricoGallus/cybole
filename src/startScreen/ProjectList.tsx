@@ -4,6 +4,8 @@ import {DataScroller} from "primereact/datascroller";
 import {Button} from "primereact/button";
 import {useNavigate} from "react-router-dom";
 
+import './ProjectList.css'
+
 const ProjectList = () => {
     const [projects, setProjects] = useState<ProjectSchema[]>([]);
     const navigate = useNavigate();
@@ -26,12 +28,11 @@ const ProjectList = () => {
     const projectTemplate = (data: ProjectSchema) => {
         return (
             <div className="project">
-                <div className="project-detail">
-                    <div className="project-name">{data.name}</div>
-                    <div className="project-path">{data.path}</div>
-                </div>
-                <div className="product-action">
-                    <Button label="Open" onClick={() => openProject(data)}></Button>
+                <a className="project-detail" onClick={() => openProject(data)}>
+                    <div className="project-name" >{data.name}</div>
+                    <div className="project-path"><small>{data.path}</small></div>
+                </a>
+                <div className="project-action">
                     <Button label="Delete" onClick={() => removeProject(data.name)}></Button>
                 </div>
             </div>
