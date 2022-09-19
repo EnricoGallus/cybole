@@ -2,27 +2,44 @@
 
 exports[`Setting renders component 1`] = `
 <div>
-  <div>
+  <div
+    class="card grid"
+  >
     <div
-      class="card"
+      class="col-12"
     >
       <h5>
         Settings
       </h5>
-      <a
-        href="/"
+    </div>
+    <div
+      class="col-12"
+    >
+      <div
+        class="field"
       >
-        <button
-          aria-label="Back to Project Selection"
-          class="p-button p-component p-button-secondary"
+        <label
+          class="block"
+          for="pathToCybop"
         >
-          <span
-            class="p-button-label p-c"
-          >
-            Back to Project Selection
-          </span>
-        </button>
-      </a>
+          Path to Cybop
+        </label>
+        <input
+          class="p-inputtext p-component block"
+          id="pathToCybop"
+          value=""
+        />
+      </div>
+    </div>
+    <div
+      class="col-12"
+    >
+      <button
+        class="p-button p-component"
+        id="saveSettings"
+      >
+        Save
+      </button>
     </div>
   </div>
 </div>
