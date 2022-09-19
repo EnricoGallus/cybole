@@ -16,7 +16,8 @@ export enum EditorType {
 }
 
 interface LocationStateType {
-    directory: string;
+    name: string;
+    path: string;
 }
 
 const Editor = () => {
@@ -75,11 +76,11 @@ const Editor = () => {
     }
 
     useEffect(() => {
-        readDir(locationState.directory, {recursive: true})
+        readDir(locationState.path, {recursive: true})
             .then((files) => {
                 let rootNode: TreeNode = {
                     key: 1,
-                    label: locationState.directory,
+                    label: locationState.name,
                     selectable: false,
                     leaf: true,
                     children: [],
@@ -87,7 +88,7 @@ const Editor = () => {
                 processEntries(files, rootNode)
                 setFiles([rootNode]);
             });
-    }, [locationState.directory]);
+    }, [locationState.path]);
 
     return (
         <div>

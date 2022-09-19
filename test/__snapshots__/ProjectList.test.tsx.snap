@@ -7,7 +7,7 @@ exports[`ProjectList renders component 1`] = `
       class="card"
     >
       <h5>
-        Projects
+        Recent Projects
       </h5>
     </div>
     <div
@@ -16,12 +16,26 @@ exports[`ProjectList renders component 1`] = `
       <div
         class="col-12"
       >
-        <a
-          class="btn btn-primary"
-          href="/projectNew"
+        <div
+          class="card"
         >
-          New Project
-        </a>
+          <div
+            class="p-datascroller p-component p-datascroller-inline"
+          >
+            <div
+              class="p-datascroller-content"
+              style="max-height: 500px;"
+            >
+              <ul
+                class="p-datascroller-list"
+              >
+                <li>
+                  No results found
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

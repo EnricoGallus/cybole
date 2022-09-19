@@ -8,11 +8,14 @@
   },
   "package": {
     "productName": "cybole",
-    "version": "0.2.0"
+    "version": "0.2.6"
   },
   "tauri": {
     "allowlist": {
-      "all": true
+      "all": true,
+      "fs": {
+        "scope": ["**"]
+      }
     },
     "bundle": {
       "active": true,

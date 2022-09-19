@@ -1,6 +1,6 @@
 [package]
 name = "cybole"
-version = "0.1.3"
+version = "0.2.6"
 description = "An editor for cybol projects"
 authors = ["Enrico Gallus"]
 license = ""
