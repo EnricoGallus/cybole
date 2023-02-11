@@ -1,5 +1,5 @@
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import {useLocation, useNavigate} from 'react-router-dom';
+import {useEffect, useState} from 'react';
 import {readDir, readTextFile, FileEntry} from '@tauri-apps/api/fs';
 
 import EditInXmlFormat from './EditInXmlFormat';
@@ -96,11 +96,11 @@ const Editor = () => {
                 <h5>Editor</h5>
                 <Button label="Back To Project Selection" className="p-button-secondary" onClick={() => navigator('/')} />
             </div>
-            <div className="grid" id="editor">
-                <div className="col-4">
+            <div className="grid grid-nogutter" id="editor">
+                <div className="col-3">
                     <Tree value={files} selectionMode="single" onSelect={fileIsSelected} />
                 </div>
-                <div className="col-8">
+                <div className="col-offset-1 col-8">
                     {fileSelected && renderEditor()}
                 </div>
             </div>

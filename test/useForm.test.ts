@@ -1,6 +1,5 @@
 import { ChangeEvent } from 'react';
-import { renderHook } from '@testing-library/react-hooks';
-import { act } from 'react-dom/test-utils';
+import { renderHook, act } from '@testing-library/react';
 import { useForm } from '../src/utils/useForm';
 
 interface TestData {

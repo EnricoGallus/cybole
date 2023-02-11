@@ -71,12 +71,14 @@ exports[`EditInDataGridFormat renders component 1`] = `
                 class="p-editable-column"
               >
                 <button
+                  aria-label="Expand"
                   class="p-treetable-toggler p-link p-unselectable-text"
                   style="margin-left: 0px; visibility: hidden;"
                   tabindex="-1"
                   type="button"
                 >
                   <i
+                    aria-hidden="true"
                     class="p-treetable-toggler-icon pi pi-fw pi-chevron-right"
                   />
                 </button>
@@ -127,12 +129,14 @@ exports[`EditInDataGridFormat renders component 1`] = `
                 class="p-editable-column"
               >
                 <button
+                  aria-label="Expand"
                   class="p-treetable-toggler p-link p-unselectable-text"
                   style="margin-left: 0px; visibility: hidden;"
                   tabindex="-1"
                   type="button"
                 >
                   <i
+                    aria-hidden="true"
                     class="p-treetable-toggler-icon pi pi-fw pi-chevron-right"
                   />
                 </button>
