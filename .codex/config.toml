@@ -1,0 +1,23 @@
+# ==============================
+# Context7 - Library documentation
+# ==============================
+[mcp_servers.context7]
+command = "npx"
+args = ["-y", "@upstash/context7-mcp@latest"]
+startup_timeout_sec = 30
+
+# ==============================
+# Playwright - Frontend testing
+# ==============================
+[mcp_servers.playwright]
+command = "npx"
+args = ["-y", "@playwright/mcp@latest"]
+startup_timeout_sec = 30
+
+# ==============================
+# Tauri MCP - Desktop debugging
+# ==============================
+[mcp_servers.tauri]
+command = "npx"
+args = ["-y", "tauri-plugin-mcp-server"]
+startup_timeout_sec = 30
