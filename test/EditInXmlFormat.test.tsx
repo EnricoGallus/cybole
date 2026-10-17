@@ -1,12 +1,12 @@
 import React from 'react';
-import { render } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import EditInXmlFormat from '../src/editor/EditInXmlFormat';
 
 describe('EditInXmlFormat', () => {
-    test('renders component', () => {
+    test('renders the loaded XML document', async () => {
         const stateChanger = jest.fn();
-        const { container } = render(
+        render(
             <EditInXmlFormat
                 fileKey="test.xml"
                 stateChanger={stateChanger}
@@ -15,6 +15,7 @@ describe('EditInXmlFormat', () => {
             { wrapper: MemoryRouter }
         );
 
-        expect(container).toMatchSnapshot();
+        expect(await screen.findByText('test')).toBeInTheDocument();
+        expect(screen.getByText('test2')).toBeInTheDocument();
     });
 });

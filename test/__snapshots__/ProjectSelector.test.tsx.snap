@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`StartScreen renders component 1`] = `
 <div>
@@ -23,57 +23,90 @@ exports[`StartScreen renders component 1`] = `
         class="col-3"
       >
         <div
-          class="p-menu p-component"
+          class="p-menu p-component p-ripple-disabled"
+          data-pc-name="menu"
+          data-pc-section="root"
         >
           <ul
             class="p-menu-list p-reset"
+            data-pc-section="menu"
+            id="pr_id_4_list"
             role="menu"
+            tabindex="0"
           >
             <li
               class="p-submenu-header"
-              role="presentation"
+              data-pc-section="submenuheader"
+              id="pr_id_4_sub_0"
+              role="none"
             >
               Menu
             </li>
             <li
+              aria-label="Projects"
               class="p-menuitem"
-              role="none"
+              data-p-disabled="false"
+              data-p-focused="false"
+              data-pc-section="menuitem"
+              id="pr_id_4_sub_0_0"
+              role="menuitem"
             >
-              <a
-                class="p-menuitem-link"
-                href="#"
-                role="menuitem"
-                tabindex="0"
+              <div
+                class="p-menuitem-content"
+                data-pc-section="content"
               >
-                <span
-                  class="p-menuitem-icon pi pi-align-justify"
-                />
-                <span
-                  class="p-menuitem-text"
+                <a
+                  aria-label="Projects"
+                  class="p-menuitem-link"
+                  data-pc-section="action"
+                  href="#"
+                  tabindex="-1"
                 >
-                  Projects
-                </span>
-              </a>
+                  <span
+                    class="p-menuitem-icon pi pi-align-justify"
+                    data-pc-section="icon"
+                  />
+                  <span
+                    class="p-menuitem-text"
+                    data-pc-section="label"
+                  >
+                    Projects
+                  </span>
+                </a>
+              </div>
             </li>
             <li
+              aria-label="Settings"
               class="p-menuitem"
-              role="none"
+              data-p-disabled="false"
+              data-p-focused="false"
+              data-pc-section="menuitem"
+              id="pr_id_4_sub_0_1"
+              role="menuitem"
             >
-              <a
-                class="p-menuitem-link"
-                href="#"
-                role="menuitem"
-                tabindex="0"
+              <div
+                class="p-menuitem-content"
+                data-pc-section="content"
               >
-                <span
-                  class="p-menuitem-icon pi pi-cog"
-                />
-                <span
-                  class="p-menuitem-text"
+                <a
+                  aria-label="Settings"
+                  class="p-menuitem-link"
+                  data-pc-section="action"
+                  href="#"
+                  tabindex="-1"
                 >
-                  Settings
-                </span>
-              </a>
+                  <span
+                    class="p-menuitem-icon pi pi-cog"
+                    data-pc-section="icon"
+                  />
+                  <span
+                    class="p-menuitem-text"
+                    data-pc-section="label"
+                  >
+                    Settings
+                  </span>
+                </a>
+              </div>
             </li>
           </ul>
         </div>

@@ -2,9 +2,9 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import ProjectOpen from '../src/startScreen/ProjectOpen';
-import * as tauriApi from '@tauri-apps/api/dialog';
+import * as platform from '../src/platform/files';
 
-jest.mock('@tauri-apps/api/dialog', () => ({ open: jest.fn() }));
+jest.mock('../src/platform/files', () => ({ selectProjectDirectory: jest.fn() }));
 
 describe('ProjectOpen', () => {
     test('renders component', () => {
@@ -14,7 +14,7 @@ describe('ProjectOpen', () => {
     });
 
     test('openDirectoryDialog should set selected directory to input', async () => {
-        jest.mocked(tauriApi.open).mockResolvedValueOnce('directory');
+        jest.mocked(platform.selectProjectDirectory).mockResolvedValueOnce('directory');
 
         render(<ProjectOpen />, { wrapper: MemoryRouter });
 

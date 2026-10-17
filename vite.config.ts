@@ -5,8 +5,8 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   resolve: {
-    // The XML editor's stream shim expects this component-style emitter API.
-    alias: { emitter: 'emitter-component' },
+    // xml2js needs a browser implementation of Node's EventEmitter.
+    alias: { events: 'events/' },
   },
   // prevent vite from obscuring rust errors
   clearScreen: false,
@@ -23,7 +23,7 @@ export default defineConfig({
     // Bundle syntax targets for the desktop webviews; TypeScript does not emit JS.
     target: ['es2021', 'chrome100', 'safari13'],
     // don't minify for debug builds
-    minify: !process.env.TAURI_DEBUG ? 'esbuild' : false,
+    minify: !process.env.TAURI_DEBUG,
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
   },

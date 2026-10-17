@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`ProjectOpen renders component 1`] = `
 <div>
@@ -20,6 +20,8 @@ exports[`ProjectOpen renders component 1`] = `
         >
           <input
             class="p-inputtext p-component"
+            data-pc-name="inputtext"
+            data-pc-section="root"
             id="projectName"
             placeholder="Project Name"
             value=""
@@ -31,6 +33,8 @@ exports[`ProjectOpen renders component 1`] = `
           <input
             aria-label="project-directory-input"
             class="p-inputtext p-component"
+            data-pc-name="inputtext"
+            data-pc-section="root"
             id="projectDirectory"
             placeholder="Project Directory"
             readonly=""
@@ -40,10 +44,13 @@ exports[`ProjectOpen renders component 1`] = `
         <button
           aria-label="Create Project"
           class="p-button p-component"
+          data-pc-name="button"
+          data-pc-section="root"
           type="submit"
         >
           <span
             class="p-button-label p-c"
+            data-pc-section="label"
           >
             Create Project
           </span>

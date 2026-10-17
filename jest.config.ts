@@ -4,8 +4,9 @@ const config: Config = {
     testEnvironment: 'jsdom',
     testMatch: ['<rootDir>/test/**/*.test.ts', '<rootDir>/test/**/*.test.tsx'],
     transform: {
-        '^.+\\.tsx?$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.test.json' }],
+        '^.+\\.[jt]sx?$': ['ts-jest', { tsconfig: '<rootDir>/tsconfig.test.json' }],
     },
+    transformIgnorePatterns: ['/node_modules/(?!react-xml-editor/)'],
     moduleNameMapper: {
         '\\.(css|less|sass|scss)$': 'identity-obj-proxy',
     },

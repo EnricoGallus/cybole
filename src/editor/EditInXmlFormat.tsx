@@ -1,14 +1,14 @@
 import { Builder, Util, XmlEditor } from 'react-xml-editor';
-import {createRef, useState} from 'react';
+import {useRef, useState} from 'react';
 import type { DocSpec, Xml } from 'react-xml-editor/lib/src/types';
 import 'react-xml-editor/css/xonomy.css';
-import {writeTextFile} from "@tauri-apps/api/fs";
+import {writeTextFile} from "../platform/files";
 
 const EditInXmlFormat = (props: EditorProps) => {
     const { content, fileKey, stateChanger } = props;
     const [xmlContent] = useState(content);
     const [editorKey] = useState(fileKey);
-    const xmlEditorRef = createRef<XmlEditor>();
+    const xmlEditorRef = useRef<XmlEditor>(null);
     const nodeDef = '<node name="" channel="" format="" model=""/>';
     const cybolDef: DocSpec = {
         elements: {

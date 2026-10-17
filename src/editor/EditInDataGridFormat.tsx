@@ -7,7 +7,7 @@ import {Toast} from "primereact/toast";
 import {ContextMenu} from "primereact/contextmenu";
 import {InputText} from "primereact/inputtext";
 import {Dropdown} from "primereact/dropdown";
-import {writeTextFile} from "@tauri-apps/api/fs";
+import {writeTextFile} from "../platform/files";
 
 function convertNodeToDataRow(node: CybolNode | null, index: number, parent: DataRow | null): DataRow {
     return {

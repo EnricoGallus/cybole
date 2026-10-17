@@ -1,0 +1,27 @@
+- generic [ref=e3]:
+  - heading "Projects" [level=5] [ref=e6]
+  - generic [ref=e7]:
+    - menu [ref=e10]:
+      - text: Menu
+      - menuitem "Projects" [ref=e11]:
+        - link "Projects" [ref=e13] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e14]: 
+      - menuitem "Settings" [ref=e16]:
+        - link "Settings" [ref=e18] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e19]: 
+    - generic [ref=e21]:
+      - generic [ref=e23]:
+        - heading "Open Directory and create new project" [level=5] [ref=e24]
+        - generic [ref=e25]:
+          - textbox "Project Name" [ref=e27]
+          - textbox "project-directory-input" [ref=e29]:
+            - /placeholder: Project Directory
+          - button "Create Project" [ref=e30] [cursor=pointer]
+      - generic [ref=e32]:
+        - generic [ref=e33]:
+          - heading "Recent Projects" [level=5] [ref=e34]
+          - alert [ref=e35]: "Could not access settings: TypeError: Cannot read properties of undefined (reading 'invoke')"
+        - list [ref=e41]:
+          - listitem [ref=e42]: No available options

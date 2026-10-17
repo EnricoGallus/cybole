@@ -1,12 +1,12 @@
 import {useLocation, useNavigate} from 'react-router-dom';
 import {useEffect, useState} from 'react';
-import {readDir, readTextFile, FileEntry} from '@tauri-apps/api/fs';
+import {readProjectDirectory, readTextFile, type ProjectEntry} from '../platform/files';
 
 import EditInXmlFormat from './EditInXmlFormat';
 import EditInDataGridFormat from './EditInDataGridFormat';
-import TreeNode from "primereact/treenode";
-import {Tree, TreeEventNodeParams} from "primereact/tree";
-import {Dropdown, DropdownChangeParams} from "primereact/dropdown";
+import type {TreeNode} from "primereact/treenode";
+import {Tree, type TreeEventNodeEvent} from "primereact/tree";
+import {Dropdown, DropdownChangeEvent} from "primereact/dropdown";
 import {Button} from "primereact/button";
 import React from 'react';
 
@@ -44,11 +44,11 @@ const Editor = () => {
         }
     };
 
-    const editorTypeChanged = (event: DropdownChangeParams) => {
+    const editorTypeChanged = (event: DropdownChangeEvent) => {
         setEditorType(event.value);
     };
 
-    const fileIsSelected = (item: TreeEventNodeParams) => {
+    const fileIsSelected = (item: TreeEventNodeEvent) => {
         readTextFile(item.node.data.path).then((content) => {
             setFileSelected(true)
             setEditorType(EditorType.DATA_GRID);
@@ -62,7 +62,7 @@ const Editor = () => {
         {label: 'DataTable', value: EditorType.DATA_GRID},
     ];
 
-    const processEntries = (entries: FileEntry[], parent: TreeNode) => {
+    const processEntries = (entries: ProjectEntry[], parent: TreeNode) => {
         for (const entry of entries) {
             if (entry.children) {
                 const directory: TreeNode = {label: entry.name, selectable: false, children: []};
@@ -76,7 +76,7 @@ const Editor = () => {
     }
 
     useEffect(() => {
-        readDir(locationState.path, {recursive: true})
+        readProjectDirectory(locationState.path)
             .then((files) => {
                 const rootNode: TreeNode = {
                     key: 1,

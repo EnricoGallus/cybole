@@ -9,20 +9,29 @@ import './ProjectList.css'
 const ProjectList = () => {
     const [projects, setProjects] = useState<ProjectSchema[]>([]);
     const navigate = useNavigate();
+    const [error, setError] = useState('');
 
     useEffect(() => {
+        let active = true;
         persister.get().get('projects')
-            .catch(r => console.log(r))
-            .then(p => setProjects(p as ProjectSchema[]));
-    }, [projects]);
+            .then(projects => { if (active) setProjects(projects); })
+            .catch(error => { if (active) setError(String(error)); });
+        return () => { active = false; };
+    }, []);
 
     const openProject = (data: ProjectSchema) => {
         navigate('/editor', {state: {name: data.name, path: data.path}})
     }
 
-    const removeProject = (projectName: string) => {
+    const removeProject = async (projectName: string) => {
         const changeProjects = projects.filter((s: ProjectSchema) => s.name != projectName)
-        persister.get().set('projects', changeProjects)
+        try {
+            await persister.get().set('projects', changeProjects);
+            setProjects(changeProjects);
+            setError('');
+        } catch (error) {
+            setError(String(error));
+        }
     }
 
     const projectTemplate = (data: ProjectSchema) => {
@@ -43,6 +52,7 @@ const ProjectList = () => {
         <div>
             <div className="card">
                 <h5>Recent Projects</h5>
+                {error && <p role="alert">Could not access settings: {error}</p>}
             </div>
             <div className="grid">
                 <div className="col-12">
