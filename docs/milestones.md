@@ -20,8 +20,6 @@ Inspection of the current working tree on 2026-10-17 found:
 
 - The manifests use Tauri 1.2, React 18, TypeScript 4.9, and Vite 4. The Tauri 2
   entry in `AGENTS.md` describes the intended target rather than the current code.
-- The frontend already uses Vite, but `package.json` retains Create React App
-  tooling and Electron packaging configuration. The README is also outdated.
 - `src/editor/EditInDataGridFormat.tsx` already uses a PrimeReact TreeTable.
   Its loader maps only two levels and assumes multiple top-level child nodes.
   Its saver reconstructs XML from a fixed set of attributes.
