@@ -73,6 +73,7 @@ is not a replacement for a dedicated formatting tool.
 | `tsconfig.json` | Browser/React code in `src`, with DOM and Vite client types |
 | `tsconfig.node.json` | `vite.config.ts` and `jest.config.ts`, with Node types |
 | `tsconfig.test.json` | Source and tests together, with Jest/Node/DOM types and CommonJS for ts-jest |
+| `test/tsconfig.json` | Editor-discoverable entry point extending the same test configuration |
 | `vite.config.ts` | React transformation, development server, and bundle targets |
 | `jest.config.ts` | Test discovery, ts-jest using the test tsconfig, CSS mocks, and coverage |
 | `.eslintrc.cjs` | ESLint 8 rules for TypeScript and React Hooks |
@@ -81,6 +82,10 @@ is not a replacement for a dedicated formatting tool.
 `yarn typecheck` invokes `tsc -p` explicitly for all three environments. There are
 no project references or emitted TypeScript build artifacts. `tsc` validates types;
 Vite emits the frontend JavaScript. See [Vite 4's TypeScript guide](https://v4.vite.dev/guide/features.html#typescript).
+
+Editors discover `test/tsconfig.json` when opening test files. It extends
+`tsconfig.test.json`, matching the configuration used by Jest and the command-line
+type check, including the shared declarations in `src/@types/`.
 
 The compiler uses an ES2021 library baseline. Vite's `build.target` separately
 controls output syntax (`es2021`, `chrome100`, and `safari13`, retained from the
