@@ -4,6 +4,8 @@ import { MemoryRouter } from 'react-router-dom';
 import ProjectOpen from '../src/startScreen/ProjectOpen';
 import * as tauriApi from '@tauri-apps/api/dialog';
 
+jest.mock('@tauri-apps/api/dialog', () => ({ open: jest.fn() }));
+
 describe('ProjectOpen', () => {
     test('renders component', () => {
         const { container } = render(<ProjectOpen />, { wrapper: MemoryRouter });
@@ -12,7 +14,7 @@ describe('ProjectOpen', () => {
     });
 
     test('openDirectoryDialog should set selected directory to input', async () => {
-        jest.spyOn(tauriApi, 'open').mockImplementationOnce(() => Promise.resolve('directory'));
+        jest.mocked(tauriApi.open).mockResolvedValueOnce('directory');
 
         render(<ProjectOpen />, { wrapper: MemoryRouter });
 

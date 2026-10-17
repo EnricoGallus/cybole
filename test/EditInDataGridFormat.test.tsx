@@ -5,7 +5,7 @@ import EditInDataGridFormat from '../src/editor/EditInDataGridFormat';
 
 describe('EditInDataGridFormat', () => {
     test('renders component', () => {
-        let stateChanger = jest.fn();
+        const stateChanger = jest.fn();
         const { container } = render(
             <EditInDataGridFormat
                 fileKey="test.xml"

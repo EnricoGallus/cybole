@@ -5,7 +5,7 @@ import EditInXmlFormat from '../src/editor/EditInXmlFormat';
 
 describe('EditInXmlFormat', () => {
     test('renders component', () => {
-        let stateChanger = jest.fn();
+        const stateChanger = jest.fn();
         const { container } = render(
             <EditInXmlFormat
                 fileKey="test.xml"

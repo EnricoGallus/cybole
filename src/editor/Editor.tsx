@@ -65,11 +65,11 @@ const Editor = () => {
     const processEntries = (entries: FileEntry[], parent: TreeNode) => {
         for (const entry of entries) {
             if (entry.children) {
-                let directory: TreeNode = {label: entry.name, selectable: false, children: []};
+                const directory: TreeNode = {label: entry.name, selectable: false, children: []};
                 parent.children?.push(directory)
                 processEntries(entry.children, directory)
             } else {
-                let file: TreeNode = {label: entry.name, selectable: true, data: { path: entry.path }};
+                const file: TreeNode = {label: entry.name, selectable: true, data: { path: entry.path }};
                 parent.children?.push(file)
             }
         }
@@ -78,7 +78,7 @@ const Editor = () => {
     useEffect(() => {
         readDir(locationState.path, {recursive: true})
             .then((files) => {
-                let rootNode: TreeNode = {
+                const rootNode: TreeNode = {
                     key: 1,
                     label: locationState.name,
                     selectable: false,

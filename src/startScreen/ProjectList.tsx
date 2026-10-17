@@ -21,7 +21,7 @@ const ProjectList = () => {
     }
 
     const removeProject = (projectName: string) => {
-        let changeProjects = projects.filter((s: ProjectSchema) => s.name != projectName)
+        const changeProjects = projects.filter((s: ProjectSchema) => s.name != projectName)
         persister.get().set('projects', changeProjects)
     }
 

@@ -82,12 +82,12 @@ const EditInDataGridFormat = (props: EditorProps) => {
             throw new DOMException();
         }
 
-        let path = key.split('-');
+        const path = key.split('-');
         let node, parent;
         let currentPath = '';
 
         while (path.length) {
-            let list: DataRow[] = node ? node.children : nodes;
+            const list: DataRow[] = node ? node.children : nodes;
             currentPath = node ? currentPath + '-' + path[0] : path[0];
             node = list.find((node: DataRow) => node.key === currentPath);
             if (path.length - 1 && path.length - 1 > 0) {
@@ -101,8 +101,8 @@ const EditInDataGridFormat = (props: EditorProps) => {
     }
 
     const onEditorValueChange = (options: ColumnEditorOptions, value: any) => {
-        let newNodes = JSON.parse(JSON.stringify(data));
-        let { node } = findNodeParentByKey(newNodes, options.node.key);
+        const newNodes = JSON.parse(JSON.stringify(data));
+        const { node } = findNodeParentByKey(newNodes, options.node.key);
         // @ts-ignore
         node.data[options.field] = value;
         updateData(newNodes);
@@ -132,7 +132,7 @@ const EditInDataGridFormat = (props: EditorProps) => {
             icon: 'pi pi-plus',
             command: () => {
                 let newNodes = JSON.parse(JSON.stringify(data));
-                let {parent} = findNodeParentByKey(newNodes, selectedNodeKey);
+                const {parent} = findNodeParentByKey(newNodes, selectedNodeKey);
                 if (parent == undefined) {
                     const index = newNodes.findIndex((node: DataRow) => node.key === selectedNodeKey) + 1;
                     const newNode = convertNodeToDataRow(null, getNextIndex(newNodes), null);
@@ -150,8 +150,8 @@ const EditInDataGridFormat = (props: EditorProps) => {
             label: 'Add SubNode',
             icon: 'pi pi-arrow-down',
             command: () => {
-                let newNodes = JSON.parse(JSON.stringify(data));
-                let {node} = findNodeParentByKey(newNodes, selectedNodeKey);
+                const newNodes = JSON.parse(JSON.stringify(data));
+                const {node} = findNodeParentByKey(newNodes, selectedNodeKey);
                 if (node === undefined) {
                     toast?.current?.show({ severity: 'error', summary: 'Add SubNode failed', detail: selectedNodeKey });
                 } else {
@@ -166,7 +166,7 @@ const EditInDataGridFormat = (props: EditorProps) => {
             icon: 'pi pi-trash',
             command: () => {
                 let newNodes = JSON.parse(JSON.stringify(data));
-                let {parent} = findNodeParentByKey(newNodes, selectedNodeKey);
+                const {parent} = findNodeParentByKey(newNodes, selectedNodeKey);
                 if (parent === undefined) {
                     newNodes = newNodes.filter((node: DataRow) => node.key != selectedNodeKey);
                 } else {

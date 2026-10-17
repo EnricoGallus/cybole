@@ -1,6 +1,6 @@
 import { Builder, Util, XmlEditor } from 'react-xml-editor';
-import {createRef, useEffect, useState} from 'react';
-import { DocSpec, Xml } from 'react-xml-editor/lib/types';
+import {createRef, useState} from 'react';
+import type { DocSpec, Xml } from 'react-xml-editor/lib/src/types';
 import 'react-xml-editor/css/xonomy.css';
 import {writeTextFile} from "@tauri-apps/api/fs";
 
