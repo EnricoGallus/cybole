@@ -17,7 +17,7 @@ module.exports = {
     overrides: [
         {
             files: ['test/**/*.{ts,tsx}'],
-            env: { jest: true, node: true },
+            env: { node: true },
         },
         {
             files: ['*.config.ts', '*.cjs'],

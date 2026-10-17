@@ -24,3 +24,8 @@ yarn-debug.log*
 yarn-error.log*
 
 /.idea/*
+
+# Browser test output
+/playwright-report/
+/test-results/
+/.playwright-mcp/

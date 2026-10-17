@@ -1,10 +1,13 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "rootDir": ".",
-    "allowJs": true,
-    "module": "CommonJS",
-    "types": ["vite/client", "jest", "node", "@testing-library/jest-dom"]
+    "types": [
+      "vite/client",
+      "node"
+    ]
   },
-  "include": ["src", "test"]
+  "include": [
+    "src",
+    "test"
+  ]
 }

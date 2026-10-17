@@ -1,17 +1,18 @@
+// @vitest-environment node
+import { beforeEach, describe, test, expect, vi } from 'vitest';
 import { load, type Store } from '@tauri-apps/plugin-store';
 import { Persister } from '../src/utils/persister';
 
-jest.unmock('../src/utils/persister');
-jest.mock('@tauri-apps/api/path', () => ({
-    appConfigDir: jest.fn().mockResolvedValue('/legacy/config'),
-    join: jest.fn((...parts: string[]) => Promise.resolve(parts.join('/'))),
+vi.mock('@tauri-apps/api/path', () => ({
+    appConfigDir: vi.fn().mockResolvedValue('/legacy/config'),
+    join: vi.fn((...parts: string[]) => Promise.resolve(parts.join('/'))),
 }));
-jest.mock('@tauri-apps/plugin-store', () => ({ load: jest.fn() }));
+vi.mock('@tauri-apps/plugin-store', () => ({ load: vi.fn() }));
 
 describe('Tauri settings compatibility', () => {
-    const get = jest.fn();
-    const set = jest.fn();
-    const save = jest.fn();
+    const get = vi.fn();
+    const set = vi.fn();
+    const save = vi.fn();
     let settings: Persister;
 
     beforeEach(() => {
@@ -19,7 +20,7 @@ describe('Tauri settings compatibility', () => {
         get.mockReset();
         set.mockReset().mockResolvedValue(undefined);
         save.mockReset().mockResolvedValue(undefined);
-        jest.mocked(load).mockReset().mockResolvedValue({ get, set, save } as unknown as Store);
+        vi.mocked(load).mockReset().mockResolvedValue({ get, set, save } as unknown as Store);
     });
 
     test('loads the original settings file without replacing saved projects', async () => {
@@ -49,7 +50,7 @@ describe('Tauri settings compatibility', () => {
     });
 
     test('keeps load errors visible and permits a retry', async () => {
-        jest.mocked(load).mockRejectedValueOnce(new Error('invalid settings'));
+        vi.mocked(load).mockRejectedValueOnce(new Error('invalid settings'));
         await expect(settings.get().get('projects')).rejects.toThrow('invalid settings');
         get.mockResolvedValue([]);
         await expect(settings.get().get('projects')).resolves.toEqual([]);

@@ -1,3 +1,4 @@
+import { describe, it, expect, vi } from 'vitest';
 import { ChangeEvent } from 'react';
 import { renderHook, act } from '@testing-library/react';
 import { useForm } from '../src/utils/useForm';
@@ -11,7 +12,7 @@ interface TestData {
 describe('useForm', () => {
     const getFakeTestEvent = (value = '') =>
         ({
-            preventDefault: jest.fn(),
+            preventDefault: vi.fn(),
             target: { value },
         } as unknown as ChangeEvent<any>);
 
@@ -48,7 +49,7 @@ describe('useForm', () => {
 
     describe('validation', () => {
         it('should call the onSubmit callback when there are no errors', () => {
-            const onSubmit = jest.fn();
+            const onSubmit = vi.fn();
             const { result } = renderHook(() =>
                 useForm<TestData>({
                     onSubmit,
@@ -63,7 +64,7 @@ describe('useForm', () => {
 
         it('should validate required values', () => {
             const requiredMessage = 'This field is required';
-            const onSubmit = jest.fn();
+            const onSubmit = vi.fn();
             const { result } = renderHook(() =>
                 useForm<TestData>({
                     validations: {
@@ -88,7 +89,7 @@ describe('useForm', () => {
 
         it('should validate patterns', () => {
             const validationMessage = "This field isn't formatted correctly.";
-            const onSubmit = jest.fn();
+            const onSubmit = vi.fn();
             const { result } = renderHook(() =>
                 useForm<TestData>({
                     validations: {
@@ -117,7 +118,7 @@ describe('useForm', () => {
 
         it('should validate custom validations', () => {
             const validationMessage = 'The minimum length is 7 characters.';
-            const onSubmit = jest.fn();
+            const onSubmit = vi.fn();
             const { result } = renderHook(() =>
                 useForm<TestData>({
                     validations: {
@@ -160,7 +161,7 @@ describe('useForm', () => {
 
         it('should validate multiple validations', () => {
             const validationMessage = "This field isn't formatted correctly.";
-            const onSubmit = jest.fn();
+            const onSubmit = vi.fn();
             const { result } = renderHook(() =>
                 useForm<TestData>({
                     validations: {
@@ -193,7 +194,7 @@ describe('useForm', () => {
 
         it('should reset errors on submit', () => {
             const validationMessage = 'The minimum length is 7 characters.';
-            const onSubmit = jest.fn();
+            const onSubmit = vi.fn();
             const { result } = renderHook(() =>
                 useForm<TestData>({
                     validations: {
