@@ -9,20 +9,19 @@ XML editor. Read `README.md` for setup and `docs/milestones.md` for planned work
 The current stack is:
 
 - Tauri **2.12.x**, with `@tauri-apps/api` on the frontend and Rust edition 2021.
-- React 19, React Router 6, TypeScript 6.0, and Vite 8.
+- React 19, React Router 6, TypeScript 7, and Vite 8.
 - PrimeReact 10, PrimeFlex, and PrimeIcons for the UI.
 - `fast-xml-parser` for tree-table XML conversion and `react-xml-editor` for XML editing.
 - Tauri filesystem/dialog/store/persisted-scope plugins; typed frontend access
   lives in `src/platform/files.ts` and `src/utils/persister.ts`.
 - Vitest 5 for unit/service tests, React Testing Library for hook tests, and
-  Playwright for browser behavior tests in Chromium and WebKit; ESLint 8 for linting.
+  Playwright for browser behavior tests in Chromium and WebKit; Oxlint for linting.
 - Yarn Classic 1.22.22, with `yarn.lock` and `src-tauri/Cargo.lock` tracked.
 
-Use APIs compatible with the installed versions. TypeScript is intentionally pinned
-to 6.0.x: the installed TypeScript ESLint parser supports versions below 6.1. Vitest
-removes the ts-jest constraint, but does not make the lint parser TypeScript 7-ready.
-Do not bypass peer requirements or suppress unsupported-version warnings to claim
-a complete compiler migration.
+Use APIs compatible with the installed versions. Type checking uses TypeScript 7
+and linting uses Oxlint's native TypeScript/React rules. ESLint, typescript-eslint,
+and ts-jest are not part of this toolchain. Keep linting, compiler checks, and
+Vite/Vitest transpilation separate; a successful bundle does not prove type safety.
 
 ## Code layout and boundaries
 
@@ -76,8 +75,10 @@ examples in design notes.
   legacy saved projects from the settings file. Keep the application identifier
   `org.enchan.cybole` and `settings.json` in the app-config directory stable.
 - Tauri reads the application version from `package.json`; Cargo currently matches it.
-- `package.json` uses ES modules; the ESLint configuration is `.eslintrc.cjs`.
-  There is no standalone formatter. `yarn lint:fix` applies ESLint fixes only.
+- `package.json` uses ES modules. Oxlint is configured in `.oxlintrc.json` with
+  correctness rules, unused-variable warnings, and React Hook checks.
+  `yarn lint:fix` applies safe Oxlint fixes; there is no standalone formatter.
+  Keep `yarn typecheck` for compiler diagnostics; type-aware linting is not enabled.
 
 Use Yarn for dependency changes and keep the lockfile synchronized. Remove unused
 packages based on source, configuration, and transitive runtime requirements.

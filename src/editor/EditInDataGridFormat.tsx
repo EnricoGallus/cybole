@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useRef, useState} from 'react';
 import {XMLBuilder, XMLParser} from 'fast-xml-parser';
 
 import {Column, ColumnEditorOptions} from "primereact/column";
@@ -65,7 +65,7 @@ const channelTypes = ['inline', 'file'];
 
 const EditInDataGridFormat = (props: EditorProps) => {
     const { fileKey, stateChanger } = props;
-    const [data, setData] = useState<DataRow[]>();
+    const [data, setData] = useState<DataRow[]>(() => convertContentToTableFormat(props.content));
     const [selectedNodeKey, setSelectedNodeKey] = useState(null);
     const toast = useRef<Toast>(null);
     const cm = useRef<ContextMenu>(null);
@@ -178,10 +178,6 @@ const EditInDataGridFormat = (props: EditorProps) => {
             }
         }
     ];
-
-    useEffect(() => {
-        setData(convertContentToTableFormat(props.content))
-    }, []);
 
     return (
         <div className="tableContainer">

@@ -20,6 +20,19 @@ interface LocationStateType {
     path: string;
 }
 
+const processEntries = (entries: ProjectEntry[], parent: TreeNode) => {
+    for (const entry of entries) {
+        if (entry.children) {
+            const directory: TreeNode = {label: entry.name, selectable: false, children: []};
+            parent.children?.push(directory)
+            processEntries(entry.children, directory)
+        } else {
+            const file: TreeNode = {label: entry.name, selectable: true, data: { path: entry.path }};
+            parent.children?.push(file)
+        }
+    }
+}
+
 const Editor = () => {
     const location = useLocation();
     const navigator = useNavigate();
@@ -62,19 +75,6 @@ const Editor = () => {
         {label: 'DataTable', value: EditorType.DATA_GRID},
     ];
 
-    const processEntries = (entries: ProjectEntry[], parent: TreeNode) => {
-        for (const entry of entries) {
-            if (entry.children) {
-                const directory: TreeNode = {label: entry.name, selectable: false, children: []};
-                parent.children?.push(directory)
-                processEntries(entry.children, directory)
-            } else {
-                const file: TreeNode = {label: entry.name, selectable: true, data: { path: entry.path }};
-                parent.children?.push(file)
-            }
-        }
-    }
-
     useEffect(() => {
         readProjectDirectory(locationState.path)
             .then((files) => {
@@ -88,7 +88,7 @@ const Editor = () => {
                 processEntries(files, rootNode)
                 setFiles([rootNode]);
             });
-    }, [locationState.path]);
+    }, [locationState.path, locationState.name]);
 
     return (
         <div>

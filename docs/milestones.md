@@ -18,8 +18,6 @@ do not combine toolchain migration with the new editor architecture.
 
 Inspection of the current working tree on 2026-10-17 found:
 
-- The manifests use Tauri 1.2, React 18, TypeScript 4.9, and Vite 4. The Tauri 2
-  entry in `AGENTS.md` describes the intended target rather than the current code.
 - `src/editor/EditInDataGridFormat.tsx` already uses a PrimeReact TreeTable.
   Its loader maps only two levels and assumes multiple top-level child nodes.
   Its saver reconstructs XML from a fixed set of attributes.
@@ -27,25 +25,6 @@ Inspection of the current working tree on 2026-10-17 found:
   before updating parent state, and there is no shared document lifecycle.
 - `src-tauri/src/main.rs` is primarily application setup, menus, and Sentry;
   there is no substantial custom Rust document engine to preserve.
-- TypeScript checking passed. Jest reported four passing suites and three suites
-  that could not load because of ES module handling for `tauri-settings`.
-  All 12 tests that executed passed. Editor tests primarily cover rendering.
-- Native application behavior and a Rust build have not yet been verified.
-- There are existing uncommitted changes. Preserve them throughout this work.
-
-These observations are a baseline, not completed milestone tasks.
-
-## Start here: the first three changes
-
-1. **Baseline and test repair:** preserve current work, record the environment,
-   repair the Jest dependency boundary, and establish frontend and native checks.
-2. **Frontend tooling cleanup:** remove obsolete tooling, update the essential
-   frontend toolchain in compatible groups, and document reproducible commands.
-3. **Tauri 2 migration:** migrate native configuration and APIs, put filesystem and
-   settings access behind typed services, and verify them in the desktop app.
-
-These are reviewable changes, not a requirement to force each into exactly one
-commit. Do not begin with a blanket upgrade of every package or a new UI library.
 
 ## Milestone 0 — Restore a maintainable application foundation
 
@@ -53,19 +32,6 @@ commit. Do not begin with a blanket upgrade of every package or a new UI library
 operations work, with trustworthy checks and a clear development setup.
 
 ### 0.1 Preserve work and establish the baseline
-
-- [ ] Review `git status` and the existing diff. Save or commit the work intentionally;
-      do not discard changes, reset the repository, or overwrite local settings.
-- [ ] Create a modernization branch once the current work is safely accounted for.
-- [ ] Record Node, Yarn, Rust, and Cargo versions. Retain Yarn for this migration
-      unless a concrete incompatibility requires changing package managers.
-- [ ] Inspect the lockfiles and use the matching Yarn install mode. Do not delete
-      lockfiles to resolve dependency conflicts.
-- [ ] Run the baseline commands below and record failures before changing code.
-- [ ] Launch the existing desktop app when possible. Record whether project opening,
-      settings persistence, file loading, and saving work. Use disposable file copies.
-- [ ] Choose the first supported desktop platform for local verification. Keep the
-      existing macOS, Windows, and Linux CI targets unless scope is explicitly changed.
 
 Initial commands from the repository root:
 

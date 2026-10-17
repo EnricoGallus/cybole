@@ -20,8 +20,8 @@ root.render(
         <HashRouter>
             <Routes>
                 <Route path="/editor" element={<Editor />} />
-                <Route path="/" element={<StartScreen children={<ProjectScreen />} />} />
-                <Route path="/settings" element={<StartScreen children={<Setting />} />} />
+                <Route path="/" element={<StartScreen><ProjectScreen /></StartScreen>} />
+                <Route path="/settings" element={<StartScreen><Setting /></StartScreen>} />
             </Routes>
         </HashRouter>
     </React.StrictMode>

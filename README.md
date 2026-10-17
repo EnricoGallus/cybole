@@ -3,7 +3,7 @@
 A desktop editor for CYBOL projects, built with React, TypeScript, Vite, and Tauri.
 It provides project-directory navigation, a tree-table editor, and an XML editor.
 
-The current stack is **Tauri 2.12, React 19.3, Vite 8.3, and TypeScript 6.0**.
+The current stack is **Tauri 2.12, React 19.3, Vite 8.3, and TypeScript 7.0**.
 PrimeReact 10 and `react-xml-editor` 0.10.4 provide React 19-compatible controls.
 See [the milestones](docs/milestones.md) for the document-model and editor roadmap.
 The current tree-table serializer has limited nesting and preservation support;
@@ -19,10 +19,10 @@ use disposable copies of important CYBOL files while developing it.
   Command Line Tools on macOS, C++ Build Tools/WebView2 on Windows, or the required
   GTK/WebKit development packages on Linux. CI uses WebKitGTK 4.1.
 
-TypeScript remains on **6.0.3** because the TypeScript ESLint parser currently
-supports versions below 6.1. Vitest has replaced ts-jest, removing that constraint,
-but moving the whole toolchain to TypeScript 7 still requires compatible lint
-parsing. Vite and Vitest transpilation is separate from compiler type checking.
+Type checking uses **TypeScript 7.0.2**. **Oxlint** replaces ESLint and its
+TypeScript/React plugins, removing the former parser compatibility constraint.
+Oxlint parses TypeScript independently; `yarn typecheck` still runs the compiler
+for semantic errors. Vite and Vitest transpilation is separate from both checks.
 
 ## Install and develop
 
@@ -56,9 +56,9 @@ reload and transpilation; run `yarn typecheck` separately for type errors.
 | `yarn test:e2e` | Build and run Playwright browser behavior tests |
 | `yarn test:e2e:ui` | Open Playwright's interactive test runner |
 | `yarn lint` | Check frontend, tests, and tool configuration |
-| `yarn lint:fix` | Apply available ESLint fixes; review the changes |
+| `yarn lint:fix` | Apply available Oxlint fixes; review the changes |
 
-There is no standalone formatter configured. ESLint fixes do not provide complete
+There is no standalone formatter configured. Oxlint fixes do not provide complete
 code formatting.
 
 ## Tests
@@ -100,7 +100,7 @@ Windows, and Linux.
 | `vite.config.ts` | React transformation, server, bundle targets, and browser EventEmitter alias |
 | `vitest.config.ts` | Unit discovery, environment, setup, and coverage; inherits Vite configuration |
 | `playwright.config.ts` | Browser projects, production-preview server, and failure artifacts |
-| `.eslintrc.cjs` | ESLint 8 rules for TypeScript and React Hooks |
+| `.oxlintrc.json` | Native Oxlint correctness, unused-variable, and React Hook rules |
 | `src-tauri/tauri.conf.json` | Native app configuration, packaging, and frontend hooks |
 | `src-tauri/capabilities/main.json` | Main-window plugin permissions |
 
